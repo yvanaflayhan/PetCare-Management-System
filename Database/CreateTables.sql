@@ -5,13 +5,20 @@ CREATE TABLE Owners (
     Email VARCHAR(100)
 );
 
+CREATE TABLE PetTypes(
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    TypeName VARCHAR(100) NOT NULL UNIQUE
+);
+
 CREATE TABLE Pets (
     Id INT AUTO_INCREMENT PRIMARY KEY,
     Name VARCHAR(100) NOT NULL,
-    Type VARCHAR(50),
+    TypeId INT NOT NULL,
+    Breed VARCHAR(100),
     Age INT,
     IsActive BOOLEAN DEFAULT TRUE,
     OwnerId INT,
+    FOREIGN KEY (TypeId) REFERENCES PetTypes(Id),
     FOREIGN KEY (OwnerId) REFERENCES Owners(Id)
 );
 
