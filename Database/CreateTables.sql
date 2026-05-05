@@ -26,7 +26,7 @@ CREATE TABLE Veterinarians (
     Id INT AUTO_INCREMENT PRIMARY KEY,
     Name VARCHAR(100) NOT NULL,
     Role VARCHAR(50) NOT NULL,
-    Specialization VARCHAR(100),
+    Specialization VARCHAR(100)
 );
 
 CREATE TABLE Appointments (
