@@ -1,0 +1,530 @@
+.page {
+  min-height: 100vh;
+  background: #f0f5f8;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* ── BANNER ───────────────────────────────────────────── */
+.banner {
+  background: linear-gradient(100deg, #1e4452 0%, #143c4e 50%, #185166 100%);
+  border-bottom: 1px solid rgba(62, 200, 224, 0.15);
+  padding: 0 40px;
+}
+
+.bannerInner {
+  max-width: 1060px;
+  margin: 0 auto;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.bannerDatePill {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.9);
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.bannerDivider {
+  width: 1px;
+  height: 28px;
+  background: rgba(255,255,255,0.1);
+  flex-shrink: 0;
+}
+
+.bannerStats {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.bannerStat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+}
+
+.bannerStatNum {
+  font-size: 18px;
+  font-weight: 700;
+  color: #3ec8e0;
+  line-height: 1;
+}
+
+.bannerStatLabel {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255,255,255,0.45);
+}
+
+.bannerDot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+}
+
+.attendanceBtn {
+  margin-left: auto;
+  height: 36px;
+  padding: 0 18px;
+  border-radius: 20px;
+  background: rgba(62,200,224,0.12);
+  border: 1px solid rgba(62,200,224,0.3);
+  color: #3ec8e0;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.2s, border-color 0.2s;
+  white-space: nowrap;
+}
+
+.attendanceBtn:hover {
+  background: rgba(62,200,224,0.22);
+  border-color: rgba(62,200,224,0.5);
+}
+
+.attendanceBtnDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ── CONTENT ──────────────────────────────────────────── */
+.content {
+  max-width: 1060px;
+  margin: 0 auto;
+  padding: 28px 24px 48px;
+}
+
+/* ── STAT CARDS ───────────────────────────────────────── */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.statCard {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 20px 22px 16px;
+  border: 1px solid #e2edf1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.statCard::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--accent, #3ec8e0);
+  border-radius: 0 0 16px 16px;
+  opacity: 0.5;
+}
+
+.statCard:hover {
+  box-shadow: 0 4px 20px rgba(13,43,54,0.08);
+  transform: translateY(-2px);
+}
+
+.statTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.statIconCircle {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.statDelta {
+  font-size: 11px;
+  font-weight: 500;
+  color: #7a9baa;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.statNum {
+  font-size: 36px;
+  font-weight: 700;
+  color: #0d2b36;
+  line-height: 1;
+  font-family: 'Playfair Display', serif;
+}
+
+.statLabel {
+  font-size: 12px;
+  color: #7a9baa;
+  margin-top: 4px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.statBar {
+  height: 3px;
+  background: #f0f5f8;
+  border-radius: 10px;
+  margin-top: 14px;
+  overflow: hidden;
+}
+
+.statBarFill {
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.6s ease;
+}
+
+/* ── PANELS ───────────────────────────────────────────── */
+.midRow, .bottomRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.panel {
+  background: #ffffff;
+  border-radius: 18px;
+  border: 1px solid #e2edf1;
+  padding: 22px;
+}
+
+.panelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #f0f5f7;
+}
+
+.panelTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0d2b36;
+  letter-spacing: 0.2px;
+}
+
+.panelPill {
+  font-size: 11px;
+  background: #f0f5f8;
+  color: #7a9baa;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+.emptyMsg {
+  font-size: 13px;
+  color: #b0c4ce;
+  padding: 8px 0;
+}
+
+/* staff */
+.staffRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 0;
+  border-bottom: 1px solid #f8fbfc;
+}
+
+.staffRow:last-of-type { border-bottom: none; }
+
+.staffAvatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: 'Playfair Display', serif;
+  flex-shrink: 0;
+  transition: background 0.3s, color 0.3s;
+}
+
+.staffInfo { flex: 1; }
+.staffName { font-size: 13px; font-weight: 500; color: #0d2b36; }
+.staffRole { font-size: 11px; color: #7a9baa; margin-top: 1px; }
+
+.presentDot {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.presentDotOn  { background: #d6f5e3; color: #0e6e3a; }
+.presentDotOff { background: #f5f5f5; color: #aaa; }
+
+.markBtn {
+  margin-top: 14px;
+  background: none;
+  border: 1px dashed #dce8ed;
+  color: #7a9baa;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 8px 14px;
+  border-radius: 10px;
+  width: 100%;
+  font-family: 'DM Sans', sans-serif;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.markBtn:hover { border-color: #3ec8e0; color: #3ec8e0; }
+
+/* patients in clinic */
+.patientRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 0;
+  border-bottom: 1px solid #f8fbfc;
+}
+
+.patientRow:last-child { border-bottom: none; }
+
+.patientEmoji { font-size: 22px; }
+.patientInfo  { flex: 1; }
+.patientName  { font-size: 13px; font-weight: 600; color: #0d2b36; }
+.patientMeta  { font-size: 11px; color: #7a9baa; margin-top: 1px; }
+
+/* appointments */
+.apptRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 0;
+  border-bottom: 1px solid #f8fbfc;
+}
+
+.apptRow:last-child { border-bottom: none; }
+
+.apptTime {
+  font-size: 12px;
+  font-weight: 600;
+  color: #3ec8e0;
+  min-width: 44px;
+}
+
+.apptEmoji { font-size: 20px; }
+.apptInfo  { flex: 1; }
+.apptName  { font-size: 13px; font-weight: 600; color: #0d2b36; }
+.apptMeta  { font-size: 11px; color: #7a9baa; }
+
+/* records */
+.recRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 0;
+  border-bottom: 1px solid #f8fbfc;
+}
+
+.recRow:last-child { border-bottom: none; }
+
+.recEmoji { font-size: 22px; }
+.recInfo  { flex: 1; }
+.recName  { font-size: 13px; font-weight: 600; color: #0d2b36; }
+.recDiag  { font-weight: 400; color: #7a9baa; font-size: 12px; }
+.recMeta  { font-size: 11px; color: #7a9baa; margin-top: 1px; }
+
+/* shared badge */
+.badge {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── ATTENDANCE MODAL ─────────────────────────────────── */
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(13,43,54,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 400;
+  animation: fadeIn 0.2s ease;
+}
+
+.modal {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 30px 32px 28px;
+  width: 480px;
+  max-width: 95vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideUp 0.25s cubic-bezier(0.22,1,0.36,1);
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.modalTitle {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #0d2b36;
+}
+
+.modalClose {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #7a9baa;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.modalClose:hover { background: #f4f8fa; color: #0d2b36; }
+
+.modalSub {
+  font-size: 13px;
+  color: #7a9baa;
+  margin: 0 0 22px;
+  line-height: 1.5;
+}
+
+.vetAttList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.vetAttRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: #f8fbfc;
+  border: 1px solid #e8f0f4;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.vetAttPresent {
+  background: #f0fdf8;
+  border-color: #a7f3d0;
+}
+
+.vetAttAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: 'Playfair Display', serif;
+  flex-shrink: 0;
+  transition: background 0.2s, color 0.2s;
+}
+
+.vetAttInfo { flex: 1; }
+.vetAttName { font-size: 14px; font-weight: 600; color: #0d2b36; }
+.vetAttRole { font-size: 12px; color: #7a9baa; margin-top: 2px; }
+
+.toggleBtn {
+  height: 34px;
+  padding: 0 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  border: none;
+  transition: background 0.2s, color 0.2s;
+  white-space: nowrap;
+}
+
+.toggleBtnOn  { background: #d6f5e3; color: #0e6e3a; }
+.toggleBtnOff { background: #f5f5f5; color: #aaa; }
+
+.toggleBtnOn:hover  { background: #bbf0d4; }
+.toggleBtnOff:hover { background: #ffe8e8; color: #b91c1c; }
+
+.modalActions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.btnPrimary {
+  height: 40px;
+  padding: 0 24px;
+  border-radius: 10px;
+  background: #0d2b36;
+  border: none;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: background 0.2s;
+}
+
+.btnPrimary:hover { background: #1a4a5e; }
+
+.btnSecondary {
+  height: 40px;
+  padding: 0 20px;
+  border-radius: 10px;
+  background: transparent;
+  border: 1px solid #dce8ed;
+  color: #7a9baa;
+  font-size: 14px;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.btnSecondary:hover { background: #f4f8fa; }
+
+@keyframes fadeIn {
+  from { opacity: 0; } to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
