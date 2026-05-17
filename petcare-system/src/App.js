@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import SplashScreen from './Components/Splashscreen';
-import Topbar from './Components/Topbar';
-import SideNav from './Components/SideNav';
-import Dashboard from './Components/Dashboard';
-import Patients from './Components/Patients';
-import Veterinarians from './Components/Veterinarians';
-import Appointments from './Components/Appointments';
-import MedicalRecords from './Components/Medicalrecords';
+import SplashScreen from './Components/SplashScreen/SplashScreen';
+import Topbar from './Components/Topbar/Topbar';
+import SideNav from './Components/SideNav/SideNav';
+import Dashboard from './Pages/Dashboard/Dashboard';
+import Patients from './Pages/Patients/Patients';
+import Veterinarians from './Pages/Veterinarians/Veterinarians';
+import Appointments from './Pages/Appointments/Appointments';
+import MedicalRecords from './Pages/';
 import Archive from './Components/Archive';
 
 const INITIAL_PETS = [
