@@ -139,6 +139,10 @@
   padding-right: 18px;
 }
 
+.table tr:hover td{
+  background: #f8fbfc;
+}
+
 .table th,
 .table td {
   padding: 14px 10px;
