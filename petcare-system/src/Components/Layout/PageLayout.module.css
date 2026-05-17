@@ -1,0 +1,32 @@
+.page {
+  min-height: 100vh;
+  background: #f4f8fa;
+  font-family: 'DM Sans', sans-serif;
+  width: 100%;
+}
+
+.content {
+  width: 100%;
+  padding: 36px 48px; /* more horizontal space */
+  box-sizing: border-box;
+}
+
+.header {
+  display: flex;
+  align-items: center;   /* important fix */
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.title {
+  font-family: 'Playfair Display', serif;
+  font-size: 35px;
+  font-weight: 700;
+  color: #0d2b36;
+}
+
+.sub {
+  font-size: 16px;
+  color: #7a9baa;
+  margin-top: 4px;
+}
