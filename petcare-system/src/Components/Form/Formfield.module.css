@@ -1,0 +1,48 @@
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.full {
+  grid-column: 1 / -1;
+}
+
+.label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #7a9baa;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* inputs and selects inside FormField get these styles via global */
+.group input,
+.group select,
+.group textarea {
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid #dce8ed;
+  padding: 0 12px;
+  font-size: 14px;
+  font-family: 'DM Sans', sans-serif;
+  color: #0d2b36;
+  outline: none;
+  background: #f8fbfc;
+  transition: border-color 0.2s;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.group textarea {
+  height: 80px;
+  padding: 10px 12px;
+  resize: vertical;
+}
+
+.group input:focus,
+.group select:focus,
+.group textarea:focus {
+  border-color: #3ec8e0;
+  background: #ffffff;
+}

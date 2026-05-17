@@ -6,8 +6,8 @@ import Dashboard from './Pages/Dashboard/Dashboard';
 import Patients from './Pages/Patients/Patients';
 import Veterinarians from './Pages/Veterinarians/Veterinarians';
 import Appointments from './Pages/Appointments/Appointments';
-import MedicalRecords from './Pages/';
-import Archive from './Components/Archive';
+import MedicalRecords from './Pages/MedicalRecords/Medicalrecords';
+import Archive from './Pages/Archive/Archive';
 
 const INITIAL_PETS = [
   { id: 1, name: 'Max',    species: '🐶', animalType: 'Dog',    breed: 'Golden Retriever', owner: 'Ali K.',   phone: '+961 70 111 000', age: '3y', status: 'In Examination', assignedVetId: 1 },
