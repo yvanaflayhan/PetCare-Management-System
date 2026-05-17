@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import styles from './Patients.module.css';
-import PageLayout from './Pagelayout';
-import Btn from './Btn';
-import Modal from './Modal';
-import FormField from './Formfield';
+import PageLayout from '../../Components/Layout/PageLayout';
+import Btn from '../../Components/Btn/Btn';
+import Modal from '../../Components/Modal/Modal';
+import FormField from '../../Components/Form/Formfield';
 import {
   Pencil,
   Archive,

@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './Pagelayout.module.css';
+import styles from './PageLayout.module.css';
 
 function PageLayout({ title, subtitle, action, children }) {
   return (

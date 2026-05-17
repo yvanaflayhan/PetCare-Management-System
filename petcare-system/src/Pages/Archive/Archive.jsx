@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import styles from './Archive.module.css';
-import PageLayout from './Pagelayout';
-import Card from './Card';
+import Card from '../../Components/Card/Card';
+import PageLayout from '../../Components/Layout/PageLayout';
+
 
 function Archive({ pets, records, vets }) {
   const [search, setSearch] = useState('');

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styles from './Dashboard.module.css';
-import Card from './Card';
+import Card from '../../Components/Card/Card';
 import {
   PawPrint,
   Stethoscope,

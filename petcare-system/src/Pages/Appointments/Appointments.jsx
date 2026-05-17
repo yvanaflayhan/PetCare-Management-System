@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
+import PageLayout from '../../Components/Layout/PageLayout';
+import Btn from '../../Components/Btn/Btn';
+import Modal from '../../Components/Modal/Modal';
+import FormField from '../../Components/Form/Formfield';
 import styles from './Appointments.module.css';
-import PageLayout from './Pagelayout';
-import Btn from './Btn';
-import Modal from './Modal';
-import FormField from './Formfield';
 import { Pencil, Archive } from 'lucide-react';
 
 const TODAY = '2026-05-16';
@@ -170,7 +170,7 @@ function Appointments({ appointments, setAppointments, pets, vets }) {
               <tr>
                 <td colSpan={7}>
                   <div className={styles.empty}>
-                    No appointments yet 📅
+                    No appointments yet 
                   </div>
                 </td>
               </tr>
@@ -184,7 +184,7 @@ function Appointments({ appointments, setAppointments, pets, vets }) {
       {/* ✅ RESTORED MODAL (THIS WAS MISSING) */}
       {showModal && (
         <Modal
-          title={editAppt ? '✏️ Edit Appointment' : '📅 New Appointment'}
+          title={editAppt ? '✏️ Edit Appointment' : ' New Appointment'}
           onClose={() => setShowModal(false)}
         >
           <form onSubmit={handleSubmit}>

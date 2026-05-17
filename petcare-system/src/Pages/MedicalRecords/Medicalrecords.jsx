@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import styles from './Medicalrecords.module.css';
-import PageLayout from './Pagelayout';
-import Card from './Card';
-import Btn from './Btn';
-import Modal from './Modal';
-import FormField from './Formfield';
+import Card from '../../Components/Card/Card';
+import PageLayout from '../../Components/Layout/PageLayout';
+import Btn from '../../Components/Btn/Btn';
+import Modal from '../../Components/Modal/Modal';
+import FormField from '../../Components/Form/Formfield';
 import {
   Pencil,
   Archive
