@@ -20,8 +20,8 @@ namespace Backend.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var appointments = await _db.Appointments
-                .Include(a => a.Pet)
+            var appointments = await _db
+                .Appointments.Include(a => a.Pet)
                 .Include(a => a.Veterinarian)
                 .ToListAsync();
 
@@ -34,13 +34,11 @@ namespace Backend.Controllers
         {
             var today = DateOnly.FromDateTime(DateTime.Today);
 
-            var appointments = await _db.Appointments
-                .Include(a => a.Pet)
+            var appointments = await _db
+                .Appointments.Include(a => a.Pet)
                 .Include(a => a.Veterinarian)
-                .Where(a => a.Date.HasValue &&
-                            DateOnly.FromDateTime(a.Date.Value) == today)
+                .Where(a => a.Date.HasValue && DateOnly.FromDateTime(a.Date.Value) == today)
                 .ToListAsync();
-
             return Ok(appointments);
         }
 
@@ -48,12 +46,13 @@ namespace Backend.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var appt = await _db.Appointments
-                .Include(a => a.Pet)
+            var appt = await _db
+                .Appointments.Include(a => a.Pet)
                 .Include(a => a.Veterinarian)
                 .FirstOrDefaultAsync(a => a.Id == id);
 
-            if (appt == null) return NotFound();
+            if (appt == null)
+                return NotFound();
             return Ok(appt);
         }
 
@@ -71,11 +70,12 @@ namespace Backend.Controllers
         public async Task<IActionResult> Update(int id, Appointment updated)
         {
             var appt = await _db.Appointments.FindAsync(id);
-            if (appt == null) return NotFound();
+            if (appt == null)
+                return NotFound();
 
-            appt.PetId  = updated.PetId;
-            appt.VetId  = updated.VetId;
-            appt.Date   = updated.Date;
+            appt.PetId = updated.PetId;
+            appt.VetId = updated.VetId;
+            appt.Date = updated.Date;
             appt.Reason = updated.Reason;
             appt.Status = updated.Status;
 
@@ -88,7 +88,8 @@ namespace Backend.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var appt = await _db.Appointments.FindAsync(id);
-            if (appt == null) return NotFound();
+            if (appt == null)
+                return NotFound();
 
             _db.Appointments.Remove(appt);
             await _db.SaveChangesAsync();

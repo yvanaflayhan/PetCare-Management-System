@@ -1,18 +1,19 @@
+using System.Text.Json.Serialization;
 using Backend.Data;
 using Microsoft.EntityFrameworkCore;
-using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // ── CORS: allow React (port 3000) to call this API ──────────────────────────
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowReact", policy =>
-    {
-        policy.WithOrigins("http://localhost:3000")
-              .AllowAnyHeader()
-              .AllowAnyMethod();
-    });
+    options.AddPolicy(
+        "AllowReact",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod();
+        }
+    );
 });
 
 // ── DATABASE: connect to MySQL ───────────────────────────────────────────────
@@ -23,11 +24,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 );
 
 // ── CONTROLLERS ──────────────────────────────────────────────────────────────
-builder.Services.AddControllers()
+builder
+    .Services.AddControllers()
     .AddJsonOptions(options =>
     {
-        options.JsonSerializerOptions.ReferenceHandler =
-            ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
     });
 
 builder.Services.AddEndpointsApiExplorer();

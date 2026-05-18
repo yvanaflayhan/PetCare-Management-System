@@ -14,6 +14,7 @@ namespace Backend.Models
         public string TypeName { get; set; } = string.Empty;
 
         public ICollection<Pet> Pets { get; set; } = new List<Pet>();
-        public ICollection<VetAnimalExpertise> VetAnimalExpertises { get; set; } = new List<VetAnimalExpertise>();
+        public ICollection<VetAnimalExpertise> VetAnimalExpertises { get; set; } =
+            new List<VetAnimalExpertise>();
     }
 }
