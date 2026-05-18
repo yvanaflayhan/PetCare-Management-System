@@ -24,7 +24,6 @@ namespace Backend.Models
 
         public int? OwnerId { get; set; }
 
-        // Navigation
         [ForeignKey("TypeId")]
         public PetType? PetType { get; set; }
 
