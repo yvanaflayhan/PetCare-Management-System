@@ -25,10 +25,12 @@ namespace Backend.Models
 
         public int? GraduationYear { get; set; }
 
-        // Navigation
         public VetDetails? VetDetails { get; set; }
         public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
         public ICollection<Attendance> Attendances { get; set; } = new List<Attendance>();
         public ICollection<VetAnimalExpertise> AnimalExpertises { get; set; } = new List<VetAnimalExpertise>();
+        public ICollection<PetStatus> AssignedPetStatuses { get; set; } = new List<PetStatus>();
+        public ICollection<MedicalRecord> MedicalRecords { get; set; } = new List<MedicalRecord>();
+
     }
 }

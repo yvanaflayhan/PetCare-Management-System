@@ -20,8 +20,8 @@ namespace Backend.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var pets = await _db.Pets
-                .Include(p => p.Owner)
+            var pets = await _db
+                .Pets.Include(p => p.Owner)
                 .Include(p => p.PetType)
                 .Include(p => p.PetStatus)
                 .ToListAsync();
@@ -33,15 +33,16 @@ namespace Backend.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var pet = await _db.Pets
-                .Include(p => p.Owner)
+            var pet = await _db
+                .Pets.Include(p => p.Owner)
                 .Include(p => p.PetType)
                 .Include(p => p.PetStatus)
                 .Include(p => p.MedicalRecords)
                 .Include(p => p.Appointments)
                 .FirstOrDefaultAsync(p => p.Id == id);
 
-            if (pet == null) return NotFound();
+            if (pet == null)
+                return NotFound();
             return Ok(pet);
         }
 
@@ -59,14 +60,15 @@ namespace Backend.Controllers
         public async Task<IActionResult> Update(int id, Pet updated)
         {
             var pet = await _db.Pets.FindAsync(id);
-            if (pet == null) return NotFound();
+            if (pet == null)
+                return NotFound();
 
-            pet.Name     = updated.Name;
-            pet.TypeId   = updated.TypeId;
-            pet.Breed    = updated.Breed;
-            pet.Age      = updated.Age;
+            pet.Name = updated.Name;
+            pet.TypeId = updated.TypeId;
+            pet.Breed = updated.Breed;
+            pet.Age = updated.Age;
             pet.IsActive = updated.IsActive;
-            pet.OwnerId  = updated.OwnerId;
+            pet.OwnerId = updated.OwnerId;
 
             await _db.SaveChangesAsync();
             return Ok(pet);
@@ -77,9 +79,11 @@ namespace Backend.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var pet = await _db.Pets.FindAsync(id);
-            if (pet == null) return NotFound();
+            if (pet == null)
+                return NotFound();
 
-            _db.Pets.Remove(pet);
+            pet.IsActive = false;
+            await _db.SaveChangesAsync();
             await _db.SaveChangesAsync();
             return Ok(new { message = "Pet deleted" });
         }
