@@ -34,7 +34,6 @@
   letter-spacing: 4px;
   text-transform: uppercase;
   display: block;
-  margin-bottom: 2px;
 }
 
 .drawerSubtitle {
@@ -47,10 +46,10 @@
 .navItem {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   padding: 14px 24px;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.2s ease;
   border: none;
   background: none;
   width: 100%;
@@ -68,9 +67,11 @@
 }
 
 .navIcon {
-  font-size: 20px;
-  width: 28px;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  color: #3ec8e0;
 }
 
 .navLabel {
@@ -86,10 +87,10 @@
 
 @keyframes fadeIn {
   from { opacity: 0; }
-  to   { opacity: 1; }
+  to { opacity: 1; }
 }
 
 @keyframes slideIn {
   from { transform: translateX(-100%); }
-  to   { transform: translateX(0); }
+  to { transform: translateX(0); }
 }
