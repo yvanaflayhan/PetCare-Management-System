@@ -13,7 +13,6 @@ namespace Backend.Models
         [MaxLength(100)]
         public string TypeName { get; set; } = string.Empty;
 
-        // Navigation
         public ICollection<Pet> Pets { get; set; } = new List<Pet>();
     }
 }
