@@ -22,8 +22,8 @@ namespace Backend.Controllers
         {
             var today = DateTime.Today;
 
-            var records = await _db
-                .Attendances.Include(a => a.Veterinarian)
+            var records = await _db.Attendances
+                .Include(a => a.Veterinarian)
                 .Where(a => a.AttendanceDate == today)
                 .ToListAsync();
 
@@ -34,9 +34,10 @@ namespace Backend.Controllers
         [HttpGet("month/{year}/{month}")]
         public async Task<IActionResult> GetByMonth(int year, int month)
         {
-            var records = await _db
-                .Attendances.Include(a => a.Veterinarian)
-                .Where(a => a.AttendanceDate.Year == year && a.AttendanceDate.Month == month)
+            var records = await _db.Attendances
+                .Include(a => a.Veterinarian)
+                .Where(a => a.AttendanceDate.Year == year &&
+                            a.AttendanceDate.Month == month)
                 .ToListAsync();
 
             // group by vet and count days present
@@ -44,9 +45,9 @@ namespace Backend.Controllers
                 .GroupBy(a => a.Veterinarian!.Name)
                 .Select(g => new
                 {
-                    VetName = g.Key,
+                    VetName     = g.Key,
                     DaysPresent = g.Count(a => a.IsPresent),
-                    DaysAbsent = g.Count(a => !a.IsPresent),
+                    DaysAbsent  = g.Count(a => !a.IsPresent)
                 })
                 .ToList();
 
@@ -62,9 +63,8 @@ namespace Backend.Controllers
 
             foreach (var entry in entries)
             {
-                var existing = await _db.Attendances.FirstOrDefaultAsync(a =>
-                    a.VetId == entry.VetId && a.AttendanceDate == today
-                );
+                var existing = await _db.Attendances
+                    .FirstOrDefaultAsync(a => a.VetId == entry.VetId && a.AttendanceDate == today);
 
                 if (existing != null)
                 {
@@ -72,14 +72,12 @@ namespace Backend.Controllers
                 }
                 else
                 {
-                    _db.Attendances.Add(
-                        new Attendance
-                        {
-                            VetId = entry.VetId,
-                            AttendanceDate = today,
-                            IsPresent = entry.IsPresent,
-                        }
-                    );
+                    _db.Attendances.Add(new Attendance
+                    {
+                        VetId          = entry.VetId,
+                        AttendanceDate = today,
+                        IsPresent      = entry.IsPresent
+                    });
                 }
             }
 
@@ -88,10 +86,9 @@ namespace Backend.Controllers
         }
     }
 
-    // small helper class just for the POST body
     public class AttendanceEntry
     {
-        public int VetId { get; set; }
+        public int  VetId     { get; set; }
         public bool IsPresent { get; set; }
     }
 }
