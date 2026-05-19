@@ -6,7 +6,7 @@ import Card from '../../Components/Card/Card';
 import Modal from '../../Components/Modal/Modal';
 import FormField from '../../Components/Form/Formfield';
 import { Pencil, Archive } from 'lucide-react';
-import { createVet, updateVet, deleteVet } from '../../services/api';
+import { createVet, updateVet, deleteVet } from '../../Services/api';
 
 const SPECIALTIES = [
   'General Practice', 'Surgery', 'Dermatology', 'Cardiology',
