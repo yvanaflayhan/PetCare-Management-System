@@ -344,7 +344,7 @@ function Dashboard({ pets, vets, appointments, records, petStatuses }) {
 
             {vets.map((v) => {
               const isPresent = !!todayAttendance[v.id];
-              const isAvailable = v.vetDetails?.isAvailable ?? true;
+              const isAvailable = v.vetDetails?.isAvailable === true;
 
               return (
                 <div key={v.id} className={styles.staffRow}>

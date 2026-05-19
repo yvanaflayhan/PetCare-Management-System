@@ -7,8 +7,8 @@ import Modal from '../../Components/Modal/Modal';
 import FormField from '../../Components/Form/Formfield';
 import { createVet, updateVet, deleteVet } from '../../Services/api';
 const SPECIALTIES = [
-  'General Practice', 'Surgery', 'Dermatology', 'Cardiology',
-  'Dentistry', 'Nutrition', 'Behavior & Training', 'Emergency Care', 'Exotic Animals'
+  'General Practice', 'Surgery', 'Cardiology',
+  'Dentistry', 'Behavior & Training', 'Emergency Care', 'Exotic Animals'
 ];
 
 const ROLES = ['Veterinarian', 'Trainer', 'Intern', 'Technician'];
@@ -232,8 +232,13 @@ function Veterinarians({ pets, vets, setVets, petStatuses, reload }) {
               <div className={styles.cardTop}>
                 <div className={styles.cardAvatar}>{getInitials(fName, lName)}</div>
                 <div className={styles.cardActions} onClick={e => e.stopPropagation()}>
-                  <Btn onClick={() => openEdit(vet)}>Edit</Btn>
-                  <Btn variant="secondary" onClick={() => handleArchive(vet.id)}>Archive</Btn>
+                  <Btn variant="edit" onClick={() => openEdit(vet)}>
+                    Edit
+                  </Btn>
+
+                  <Btn variant="danger" onClick={() => handleArchive(vet.id)}>
+                    Archive
+                  </Btn>
                 </div>
               </div>
               <div className={styles.cardName}>Dr. {fName} {lName}</div>

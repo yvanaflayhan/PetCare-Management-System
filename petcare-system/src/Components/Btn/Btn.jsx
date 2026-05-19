@@ -5,7 +5,14 @@ function Btn({ children, onClick, variant, type, disabled }) {
   return (
     <button
       type={type || 'button'}
-      className={`${styles.btn} ${variant === 'secondary' ? styles.secondary : ''} ${variant === 'danger' ? styles.danger : ''}`}
+      className={`${styles.btn} ${variant === 'secondary'
+          ? styles.secondary
+          : variant === 'danger'
+            ? styles.danger
+            : variant === 'edit'
+              ? styles.edit
+              : ''
+        }`}
       onClick={onClick}
       disabled={disabled}
     >

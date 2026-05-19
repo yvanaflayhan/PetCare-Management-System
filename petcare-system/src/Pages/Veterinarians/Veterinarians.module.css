@@ -32,37 +32,42 @@
 
 .cardActions {
   display: flex;
-  gap: 10px;
+  gap: 8px;
+  align-items: center;
 }
 
 .editBtn,
 .archiveBtn {
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   border: none;
   border-radius: 10px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: 0.2s;
+  transition: all 0.2s ease;
+  background: transparent;
+  border: 1px solid #e6eef2;
 }
 
 .editBtn {
-  background: #eef7fb;
-  color: #0d6eaa;
+  color: #3bb8d4;
+  background: #f4fbfd;
 }
 
 .editBtn:hover {
+  background: #e8f7fb;
   transform: translateY(-2px);
 }
 
 .archiveBtn {
-  background: #fff1f1;
-  color: #b91c1c;
+  color: #ef4444;
+  background: #fff5f5;
 }
 
 .archiveBtn:hover {
+  background: #ffecec;
   transform: translateY(-2px);
 }
 
