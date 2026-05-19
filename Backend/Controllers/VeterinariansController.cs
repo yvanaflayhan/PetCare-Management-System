@@ -20,11 +20,12 @@ namespace Backend.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var vets = await _db
-                .Veterinarians.Include(v => v.VetDetails)
-                .Include(v => v.AnimalExpertises)
-                    .ThenInclude(e => e.PetType)
-                .ToListAsync();
+           var vets = await _db.Veterinarians
+    .Where(v => !v.IsArchived)
+    .Include(v => v.VetDetails)
+    .Include(v => v.AnimalExpertises)
+        .ThenInclude(e => e.PetType)
+    .ToListAsync();
 
             return Ok(vets);
         }
@@ -33,8 +34,8 @@ namespace Backend.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var vet = await _db
-                .Veterinarians.Include(v => v.VetDetails)
+            var vet = await _db.Veterinarians
+                .Include(v => v.VetDetails)
                 .Include(v => v.AnimalExpertises)
                     .ThenInclude(e => e.PetType)
                 .Include(v => v.Appointments)
@@ -42,6 +43,7 @@ namespace Backend.Controllers
 
             if (vet == null)
                 return NotFound();
+
             return Ok(vet);
         }
 
@@ -49,8 +51,12 @@ namespace Backend.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Veterinarian vet)
         {
+            vet.IsArchived = false;
+
             _db.Veterinarians.Add(vet);
+
             await _db.SaveChangesAsync();
+
             return Ok(vet);
         }
 
@@ -59,6 +65,7 @@ namespace Backend.Controllers
         public async Task<IActionResult> Update(int id, Veterinarian updated)
         {
             var vet = await _db.Veterinarians.FindAsync(id);
+
             if (vet == null)
                 return NotFound();
 
@@ -69,20 +76,38 @@ namespace Backend.Controllers
             vet.GraduationYear = updated.GraduationYear;
 
             await _db.SaveChangesAsync();
+
             return Ok(vet);
         }
 
-        // DELETE api/veterinarians/1
+        // ARCHIVE veterinarian
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Archive(int id)
         {
             var vet = await _db.Veterinarians.FindAsync(id);
+
             if (vet == null)
                 return NotFound();
 
-            _db.Veterinarians.Remove(vet);
+            vet.IsArchived = true;
+
             await _db.SaveChangesAsync();
-            return Ok(new { message = "Veterinarian deleted" });
+
+            return Ok(new
+            {
+                message = "Veterinarian archived successfully"
+            });
         }
+
+        [HttpGet("archived")]
+public async Task<IActionResult> GetArchived()
+{
+    var vets = await _db.Veterinarians
+        .Where(v => v.IsArchived)
+        .Include(v => v.VetDetails)
+        .ToListAsync();
+
+    return Ok(vets);
+}
     }
 }
