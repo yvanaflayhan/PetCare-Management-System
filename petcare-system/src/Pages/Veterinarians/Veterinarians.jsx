@@ -5,9 +5,7 @@ import Btn from '../../Components/Btn/Btn';
 import Card from '../../Components/Card/Card';
 import Modal from '../../Components/Modal/Modal';
 import FormField from '../../Components/Form/Formfield';
-import { Pencil, Archive } from 'lucide-react';
 import { createVet, updateVet, deleteVet } from '../../Services/api';
-
 const SPECIALTIES = [
   'General Practice', 'Surgery', 'Dermatology', 'Cardiology',
   'Dentistry', 'Nutrition', 'Behavior & Training', 'Emergency Care', 'Exotic Animals'
@@ -28,10 +26,10 @@ function getInitials(f, l) {
 
 function Veterinarians({ pets, vets, setVets, petStatuses, reload }) {
   const [showModal, setShowModal] = useState(false);
-  const [editVet, setEditVet]     = useState(null);
-  const [selected, setSelected]   = useState(null);
-  const [form, setForm]           = useState(EMPTY_FORM);
-  const [saving, setSaving]       = useState(false);
+  const [editVet, setEditVet] = useState(null);
+  const [selected, setSelected] = useState(null);
+  const [form, setForm] = useState(EMPTY_FORM);
+  const [saving, setSaving] = useState(false);
 
   function openAdd() { setForm(EMPTY_FORM); setEditVet(null); setShowModal(true); }
 
@@ -39,16 +37,16 @@ function Veterinarians({ pets, vets, setVets, petStatuses, reload }) {
     // split name into firstName/lastName for the form
     const parts = (vet.name || '').trim().split(' ');
     setForm({
-      firstName:      parts[0] || '',
-      lastName:       parts.slice(1).join(' ') || '',
-      role:           vet.role           || 'Veterinarian',
-      specialty:      vet.specialization || 'General Practice',
-      university:     vet.university     || '',
+      firstName: parts[0] || '',
+      lastName: parts.slice(1).join(' ') || '',
+      role: vet.role || 'Veterinarian',
+      specialty: vet.specialization || 'General Practice',
+      university: vet.university || '',
       graduationYear: vet.graduationYear || '',
-      phone:          vet.vetDetails?.phone || '',
-      email:          vet.vetDetails?.email || '',
-      available:      vet.vetDetails?.isAvailable ?? true,
-      status:         'Active',
+      phone: vet.vetDetails?.phone || '',
+      email: vet.vetDetails?.email || '',
+      available: vet.vetDetails?.isAvailable ?? true,
+      status: 'Active',
       animalExpertise: [],
     });
     setEditVet(vet);
@@ -63,10 +61,10 @@ function Veterinarians({ pets, vets, setVets, petStatuses, reload }) {
     setSaving(true);
     try {
       const data = {
-        name:           `${form.firstName} ${form.lastName}`,
-        role:           form.role,
+        name: `${form.firstName} ${form.lastName}`,
+        role: form.role,
         specialization: form.specialty || null,
-        university:     form.university || null,
+        university: form.university || null,
         graduationYear: form.graduationYear ? parseInt(form.graduationYear) : null,
       };
       if (editVet) {
@@ -86,11 +84,19 @@ function Veterinarians({ pets, vets, setVets, petStatuses, reload }) {
 
   async function handleArchive(id) {
     try {
+      // 1. archive on backend
       await deleteVet(id);
+
+      // 2. refresh main vets list (VERY IMPORTANT)
       await reload();
-      if (selected?.id === id) setSelected(null);
+
+      // 3. close detail view if open
+      if (selected?.id === id) {
+        setSelected(null);
+      }
+
     } catch (err) {
-      alert('Error removing: ' + err.message);
+      alert('Error archiving vet: ' + err.message);
     }
   }
 
@@ -106,7 +112,7 @@ function Veterinarians({ pets, vets, setVets, petStatuses, reload }) {
     const vetPets = getVetPatients(selected);
     const nameParts = (selected.name || '').trim().split(' ');
     const firstName = nameParts[0] || '';
-    const lastName  = nameParts.slice(1).join(' ') || '';
+    const lastName = nameParts.slice(1).join(' ') || '';
 
     return (
       <PageLayout
@@ -130,7 +136,7 @@ function Veterinarians({ pets, vets, setVets, petStatuses, reload }) {
                   className={styles.availBadge}
                   style={{
                     background: selected.vetDetails?.isAvailable ? '#d6f5e3' : '#fee2e2',
-                    color:      selected.vetDetails?.isAvailable ? '#0e6e3a' : '#b91c1c',
+                    color: selected.vetDetails?.isAvailable ? '#0e6e3a' : '#b91c1c',
                   }}
                 >
                   {selected.vetDetails?.isAvailable ? 'Available' : 'Unavailable'}
@@ -156,8 +162,8 @@ function Veterinarians({ pets, vets, setVets, petStatuses, reload }) {
           )}
 
           {vetPets.map(pet => {
-            const ps      = petStatuses.find(s => s.petId === pet.id);
-            const species = { Dog:'🐶', Cat:'🐱', Rabbit:'🐰', Bird:'🐦', Hamster:'🐹', Reptile:'🦎', Fish:'🐠' };
+            const ps = petStatuses.find(s => s.petId === pet.id);
+            const species = { Dog: '🐶', Cat: '🐱', Rabbit: '🐰', Bird: '🐦', Hamster: '🐹', Reptile: '🦎', Fish: '🐠' };
             return (
               <Card key={pet.id}>
                 <div className={styles.patientRow}>
@@ -197,10 +203,10 @@ function Veterinarians({ pets, vets, setVets, petStatuses, reload }) {
         )}
 
         {vets.map(vet => {
-          const count    = getVetPatients(vet).length;
+          const count = getVetPatients(vet).length;
           const nameParts = (vet.name || '').trim().split(' ');
-          const fName    = nameParts[0] || '';
-          const lName    = nameParts.slice(1).join(' ') || '';
+          const fName = nameParts[0] || '';
+          const lName = nameParts.slice(1).join(' ') || '';
 
           return (
             <Card key={vet.id} onClick={() => setSelected(vet)}>
@@ -282,10 +288,10 @@ function Veterinarians({ pets, vets, setVets, petStatuses, reload }) {
 
 function getStatusStyle(status) {
   const map = {
-    Waiting:          { background: '#fff0cc', color: '#7a5000' },
+    Waiting: { background: '#fff0cc', color: '#7a5000' },
     'In Examination': { background: '#d6f5e3', color: '#0e6e3a' },
-    Done:             { background: '#e8f4fb', color: '#0d6eaa' },
-    Archived:         { background: '#ececec', color: '#555'    },
+    Done: { background: '#e8f4fb', color: '#0d6eaa' },
+    Archived: { background: '#ececec', color: '#555' },
   };
   return map[status] || map.Waiting;
 }

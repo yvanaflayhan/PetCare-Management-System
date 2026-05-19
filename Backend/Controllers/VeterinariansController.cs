@@ -80,31 +80,33 @@ namespace Backend.Controllers
             return Ok(vet);
         }
 
-        // ARCHIVE veterinarian
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Archive(int id)
-        {
-            var vet = await _db.Veterinarians.FindAsync(id);
+public async Task<IActionResult> Archive(int id, [FromQuery] string? reason)
+{
+    var vet = await _db.Veterinarians.FindAsync(id);
 
-            if (vet == null)
-                return NotFound();
+    if (vet == null)
+        return NotFound();
 
-            vet.IsArchived = true;
+    vet.IsArchived = true;
+    vet.ArchiveReason = reason;
 
-            await _db.SaveChangesAsync();
+    await _db.SaveChangesAsync();
 
-            return Ok(new
-            {
-                message = "Veterinarian archived successfully"
-            });
-        }
+    return Ok(new
+    {
+        message = "Veterinarian archived successfully"
+    });
+}
 
-        [HttpGet("archived")]
+[HttpGet("archived")]
 public async Task<IActionResult> GetArchived()
 {
     var vets = await _db.Veterinarians
         .Where(v => v.IsArchived)
         .Include(v => v.VetDetails)
+        .Include(v => v.AnimalExpertises)
+            .ThenInclude(e => e.PetType)
         .ToListAsync();
 
     return Ok(vets);

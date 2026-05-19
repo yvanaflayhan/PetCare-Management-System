@@ -1,164 +1,317 @@
+/* Archive.module.css */
+
+/* ── Search ───────────────────────────────── */
 .search {
   width: 100%;
-  height: 52px;
-  border-radius: 16px;
-  border: 1px solid #dce8ed;
-  padding: 0 16px;
-  font-size: 15px;
-  font-family: 'DM Sans', sans-serif;
-  margin-bottom: 24px;
+  padding: 12px 14px;
+  border: 1px solid #d6d8dc;
+  border-radius: 10px;
+  font-size: 14px;
+  margin-bottom: 18px;
+  background: #fff;
   outline: none;
+  transition: border 0.15s;
 }
-
 .search:focus {
-  border-color: #3ec8e0;
+  border-color: #4a90e2;
 }
 
-.empty {
-  text-align: center;
-  padding: 64px;
-  color: #7a9baa;
+/* ── Back button ──────────────────────────── */
+.backBtn {
+  background: none;
+  border: 1px solid #d6d8dc;
+  padding: 6px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #444;
+  margin-bottom: 16px;
+}
+.backBtn:hover {
+  background: #f4f5f7;
 }
 
-/* GROUP */
+/* ── Landing: section cards ───────────────── */
+.sectionGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+  margin-top: 12px;
+}
+.sectionCard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 8px 4px;
+  cursor: pointer;
+}
+.sectionEmoji {
+  font-size: 44px;
+  margin-bottom: 10px;
+}
+.sectionTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 6px;
+}
+.sectionDesc {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+.sectionCount {
+  font-size: 13px;
+  font-weight: 600;
+  color: #4a90e2;
+  background: #eaf3fc;
+  padding: 4px 10px;
+  border-radius: 12px;
+}
+
+/* ── Section groups ───────────────────────── */
 .group {
   margin-bottom: 28px;
 }
-
 .groupTitle {
-  font-size: 18px;
-  font-weight: 700;
-  color: #0d2b36;
-  margin-bottom: 12px;
-}
-
-/* LIST */
-.groupList {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 10px;
   display: flex;
-  flex-direction: column;
+  align-items: center;
   gap: 10px;
 }
+.groupList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+}
 
-/* ROW */
+/* ── Archive row (card content) ───────────── */
 .archiveRow {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
+  cursor: pointer;
 }
-
-/* SMALL EMOJI (like patients system) */
 .archiveEmoji {
-  font-size: 26px;
+  font-size: 32px;
+  flex-shrink: 0;
 }
-
 .archiveInfo {
   flex: 1;
+  min-width: 0;
 }
-
 .archiveName {
-  font-size: 16px;
-  font-weight: 700;
-  color: #0d2b36;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 2px;
 }
-
 .archiveMeta {
   font-size: 12px;
-  color: #7a9baa;
-  margin-top: 2px;
+  color: #666;
+  margin-bottom: 2px;
 }
-
 .archiveDiag {
-  font-size: 13px;
-  color: #3ec8e0;
-  font-weight: 600;
-  margin-top: 3px;
-}
-
-/* COUNT BADGE */
-.archiveCount {
   font-size: 12px;
-  color: #7a9baa;
-  background: #f4f8fa;
-  padding: 6px 10px;
-  border-radius: 20px;
+  color: #b91c1c;
+  font-style: italic;
+}
+.archiveCount {
+  font-size: 11px;
+  font-weight: 600;
+  background: #f4f5f7;
+  color: #555;
+  padding: 4px 8px;
+  border-radius: 10px;
+  flex-shrink: 0;
 }
 
-/* PROFILE */
-.backBtn {
-  background: none;
-  border: none;
-  color: #3ec8e0;
-  font-size: 14px;
-  cursor: pointer;
-  margin-bottom: 20px;
-}
-
+/* ── Detail view: profile header ──────────── */
 .profileHeader {
   display: flex;
   gap: 16px;
-  align-items: center;
+  align-items: flex-start;
 }
-
 .profileEmoji {
-  font-size: 38px;
+  font-size: 56px;
+  flex-shrink: 0;
 }
-
 .profileName {
   font-size: 22px;
   font-weight: 700;
-  color: #0d2b36;
+  color: #1a1a1a;
+  margin-bottom: 4px;
 }
-
 .profileMeta {
   font-size: 13px;
-  color: #7a9baa;
-  margin-top: 3px;
+  color: #555;
+  margin-bottom: 3px;
 }
 
-/* HISTORY */
+/* ── History sections ─────────────────────── */
 .historyTitle {
-  margin: 24px 0 12px;
-  font-size: 16px;
-  font-weight: 700;
-  color: #0d2b36;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 22px 0 10px;
+  border-bottom: 1px solid #ececec;
+  padding-bottom: 6px;
 }
-
 .noRec {
-  color: #7a9baa;
-  padding: 12px 0;
+  font-size: 13px;
+  color: #999;
+  font-style: italic;
+  padding: 10px 0;
 }
 
-/* RECORD */
+/* ── Record rows ──────────────────────────── */
 .recRow {
   display: flex;
-  gap: 18px;
+  gap: 14px;
+  align-items: flex-start;
 }
-
 .recDate {
   font-size: 12px;
-  color: #7a9baa;
-  min-width: 90px;
+  font-weight: 600;
+  color: #4a90e2;
+  background: #eaf3fc;
+  padding: 4px 8px;
+  border-radius: 6px;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
-
+.recBody {
+  flex: 1;
+}
 .recDiag {
-  font-size: 15px;
-  font-weight: 700;
-  color: #0d2b36;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 2px;
 }
-
 .recMeta {
-  font-size: 13px;
-  color: #7a9baa;
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 4px;
 }
-
 .recMed {
-  font-size: 13px;
-  color: #3ec8e0;
-  margin-top: 5px;
+  font-size: 12px;
+  color: #0d6eaa;
+  margin-top: 4px;
+}
+.recNotes {
+  font-size: 12px;
+  color: #555;
+  margin-top: 3px;
 }
 
-.recNotes {
+/* ── Vet chips (in pet detail) ────────────── */
+.vetChipRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.vetChip {
+  background: #eaf3fc;
+  color: #0d6eaa;
+  padding: 6px 12px;
+  border-radius: 14px;
+  font-size: 12px;
+  font-weight: 500;
+}
+.vetChip small {
+  color: #4a90e2;
+  margin-left: 4px;
+}
+
+/* ── Stats row (vet performance summary) ──── */
+.statsRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.statBox {
+  text-align: center;
+  padding: 8px 4px;
+}
+.statNum {
+  font-size: 26px;
+  font-weight: 700;
+  color: #4a90e2;
+  margin-bottom: 4px;
+}
+.statLbl {
+  font-size: 12px;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ── Presence grid ────────────────────────── */
+.presenceSummary {
+  font-size: 12px;
+  font-weight: 500;
+  color: #666;
+  margin-left: auto;
+  background: #f4f5f7;
+  padding: 3px 10px;
+  border-radius: 10px;
+}
+.absentNote {
+  font-size: 12px;
+  color: #b91c1c;
+  background: #fee2e2;
+  padding: 6px 12px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+.attendanceGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 8px;
+}
+.attendanceCell {
+  border-radius: 8px;
+  padding: 10px;
+  border: 1px solid transparent;
+}
+.attendanceCell.present {
+  background: #d6f5e3;
+  border-color: #b6e5cc;
+}
+.attendanceCell.absent {
+  background: #fee2e2;
+  border-color: #fcc;
+}
+.attendanceDate {
+  font-size: 12px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 4px;
+}
+.attendanceState {
   font-size: 13px;
-  color: #7a9baa;
-  margin-top: 3px;
+  font-weight: 600;
+}
+.attendanceCell.present .attendanceState { color: #0e6e3a; }
+.attendanceCell.absent .attendanceState  { color: #b91c1c; }
+.attendanceNote {
+  font-size: 11px;
+  color: #555;
+  margin-top: 4px;
+}
+
+/* ── Empty state ──────────────────────────── */
+.empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: #999;
+  font-size: 14px;
+  font-style: italic;
 }
