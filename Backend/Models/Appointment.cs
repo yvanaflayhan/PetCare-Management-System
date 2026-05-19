@@ -13,7 +13,8 @@ namespace Backend.Models
 
         public int? VetId { get; set; }
 
-        public DateTime? AppointmentDate { get; set; }
+        [Column("Date")]
+        public DateTime? Date { get; set; }
 
         [MaxLength(255)]
         public string? Reason { get; set; }

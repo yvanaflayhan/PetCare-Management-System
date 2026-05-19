@@ -20,8 +20,8 @@ namespace Backend.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var vets = await _db.Veterinarians
-                .Include(v => v.VetDetails)
+            var vets = await _db
+                .Veterinarians.Include(v => v.VetDetails)
                 .Include(v => v.AnimalExpertises)
                     .ThenInclude(e => e.PetType)
                 .ToListAsync();
@@ -33,14 +33,15 @@ namespace Backend.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var vet = await _db.Veterinarians
-                .Include(v => v.VetDetails)
+            var vet = await _db
+                .Veterinarians.Include(v => v.VetDetails)
                 .Include(v => v.AnimalExpertises)
                     .ThenInclude(e => e.PetType)
                 .Include(v => v.Appointments)
                 .FirstOrDefaultAsync(v => v.Id == id);
 
-            if (vet == null) return NotFound();
+            if (vet == null)
+                return NotFound();
             return Ok(vet);
         }
 
@@ -58,12 +59,13 @@ namespace Backend.Controllers
         public async Task<IActionResult> Update(int id, Veterinarian updated)
         {
             var vet = await _db.Veterinarians.FindAsync(id);
-            if (vet == null) return NotFound();
+            if (vet == null)
+                return NotFound();
 
-            vet.Name           = updated.Name;
-            vet.Role           = updated.Role;
+            vet.Name = updated.Name;
+            vet.Role = updated.Role;
             vet.Specialization = updated.Specialization;
-            vet.University     = updated.University;
+            vet.University = updated.University;
             vet.GraduationYear = updated.GraduationYear;
 
             await _db.SaveChangesAsync();
@@ -75,7 +77,8 @@ namespace Backend.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var vet = await _db.Veterinarians.FindAsync(id);
-            if (vet == null) return NotFound();
+            if (vet == null)
+                return NotFound();
 
             _db.Veterinarians.Remove(vet);
             await _db.SaveChangesAsync();

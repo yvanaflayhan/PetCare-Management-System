@@ -32,12 +32,12 @@ namespace Backend.Controllers
         [HttpGet("today")]
         public async Task<IActionResult> GetToday()
         {
-            var today = DateOnly.FromDateTime(DateTime.Today);
+            var today = DateTime.Now.Date;
 
             var appointments = await _db
                 .Appointments.Include(a => a.Pet)
                 .Include(a => a.Veterinarian)
-                .Where(a => a.Date.HasValue && DateOnly.FromDateTime(a.Date.Value) == today)
+                .Where(a => a.Date.HasValue && a.Date.Value.Date == today)
                 .ToListAsync();
             return Ok(appointments);
         }

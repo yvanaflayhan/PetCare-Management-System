@@ -28,11 +28,10 @@ namespace Backend.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var owner = await _db.Owners
-                .Include(o => o.Pets)
-                .FirstOrDefaultAsync(o => o.Id == id);
+            var owner = await _db.Owners.Include(o => o.Pets).FirstOrDefaultAsync(o => o.Id == id);
 
-            if (owner == null) return NotFound();
+            if (owner == null)
+                return NotFound();
             return Ok(owner);
         }
 
@@ -50,9 +49,10 @@ namespace Backend.Controllers
         public async Task<IActionResult> Update(int id, Owner updated)
         {
             var owner = await _db.Owners.FindAsync(id);
-            if (owner == null) return NotFound();
+            if (owner == null)
+                return NotFound();
 
-            owner.Name  = updated.Name;
+            owner.Name = updated.Name;
             owner.Phone = updated.Phone;
             owner.Email = updated.Email;
 
@@ -65,7 +65,8 @@ namespace Backend.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var owner = await _db.Owners.FindAsync(id);
-            if (owner == null) return NotFound();
+            if (owner == null)
+                return NotFound();
 
             _db.Owners.Remove(owner);
             await _db.SaveChangesAsync();

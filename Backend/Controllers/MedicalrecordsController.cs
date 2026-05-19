@@ -20,8 +20,8 @@ namespace Backend.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var records = await _db.MedicalRecords
-                .Include(r => r.Pet)
+            var records = await _db
+                .MedicalRecords.Include(r => r.Pet)
                 .Include(r => r.Veterinarian)
                 .ToListAsync();
 
@@ -32,8 +32,8 @@ namespace Backend.Controllers
         [HttpGet("pet/{petId}")]
         public async Task<IActionResult> GetByPet(int petId)
         {
-            var records = await _db.MedicalRecords
-                .Include(r => r.Pet)
+            var records = await _db
+                .MedicalRecords.Include(r => r.Pet)
                 .Include(r => r.Veterinarian)
                 .Where(r => r.PetId == petId)
                 .ToListAsync();
@@ -45,12 +45,13 @@ namespace Backend.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var record = await _db.MedicalRecords
-                .Include(r => r.Pet)
+            var record = await _db
+                .MedicalRecords.Include(r => r.Pet)
                 .Include(r => r.Veterinarian)
                 .FirstOrDefaultAsync(r => r.Id == id);
 
-            if (record == null) return NotFound();
+            if (record == null)
+                return NotFound();
             return Ok(record);
         }
 
@@ -61,10 +62,12 @@ namespace Backend.Controllers
             _db.MedicalRecords.Add(record);
 
             // automatically set the pet status to Done
-            var petStatus = await _db.PetStatuses.FirstOrDefaultAsync(ps => ps.PetId == record.PetId);
+            var petStatus = await _db.PetStatuses.FirstOrDefaultAsync(ps =>
+                ps.PetId == record.PetId
+            );
             if (petStatus != null)
             {
-                petStatus.Status    = "Done";
+                petStatus.Status = "Done";
                 petStatus.UpdatedAt = DateTime.Now;
             }
 
@@ -77,14 +80,15 @@ namespace Backend.Controllers
         public async Task<IActionResult> Update(int id, MedicalRecord updated)
         {
             var record = await _db.MedicalRecords.FindAsync(id);
-            if (record == null) return NotFound();
+            if (record == null)
+                return NotFound();
 
-            record.Symptoms         = updated.Symptoms;
-            record.Diagnosis        = updated.Diagnosis;
-            record.Treatment        = updated.Treatment;
-            record.Medicine         = updated.Medicine;
-            record.Notes            = updated.Notes;
-            record.ExaminationDate  = updated.ExaminationDate;
+            record.Symptoms = updated.Symptoms;
+            record.Diagnosis = updated.Diagnosis;
+            record.Treatment = updated.Treatment;
+            record.Medicine = updated.Medicine;
+            record.Notes = updated.Notes;
+            record.ExaminationDate = updated.ExaminationDate;
 
             await _db.SaveChangesAsync();
             return Ok(record);
@@ -95,7 +99,8 @@ namespace Backend.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var record = await _db.MedicalRecords.FindAsync(id);
-            if (record == null) return NotFound();
+            if (record == null)
+                return NotFound();
 
             _db.MedicalRecords.Remove(record);
             await _db.SaveChangesAsync();

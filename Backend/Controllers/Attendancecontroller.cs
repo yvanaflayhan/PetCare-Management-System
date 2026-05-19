@@ -20,7 +20,7 @@ namespace Backend.Controllers
         [HttpGet("today")]
         public async Task<IActionResult> GetToday()
         {
-            var today = DateOnly.FromDateTime(DateTime.Today);
+            var today = DateTime.Today;
 
             var records = await _db
                 .Attendances.Include(a => a.Veterinarian)
@@ -58,7 +58,7 @@ namespace Backend.Controllers
         [HttpPost("save")]
         public async Task<IActionResult> SaveToday(List<AttendanceEntry> entries)
         {
-            var today = DateOnly.FromDateTime(DateTime.Today);
+            var today = DateTime.Today;
 
             foreach (var entry in entries)
             {
