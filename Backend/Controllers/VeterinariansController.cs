@@ -89,7 +89,8 @@ namespace Backend.Controllers
 
             vet.VetDetails.Phone = updated.VetDetails?.Phone;
             vet.VetDetails.Email = updated.VetDetails?.Email;
-            vet.VetDetails.IsAvailable = updated.VetDetails?.IsAvailable ?? true;
+            vet.VetDetails.IsAvailable =
+                updated.VetDetails?.IsAvailable ?? vet.VetDetails.IsAvailable;
 
             await _db.SaveChangesAsync();
 
