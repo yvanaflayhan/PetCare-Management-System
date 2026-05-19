@@ -43,9 +43,9 @@ function Veterinarians({ pets, vets, setVets, petStatuses, reload }) {
       specialty: vet.specialization || 'General Practice',
       university: vet.university || '',
       graduationYear: vet.graduationYear || '',
-      phone: vet.vetDetails?.phone || '',
+      pphone: vet.vetDetails?.phone || '',
       email: vet.vetDetails?.email || '',
-      available: vet.vetDetails?.isAvailable ?? true,
+      available: vet.isAvailable ?? true,
       status: 'Active',
       animalExpertise: [],
     });
@@ -75,14 +75,13 @@ function Veterinarians({ pets, vets, setVets, petStatuses, reload }) {
         role: form.role,
         specialization: form.specialty || null,
         university: form.university || null,
-        graduationYear: form.graduationYear
-          ? parseInt(form.graduationYear)
-          : null,
+        graduationYear: form.graduationYear ? parseInt(form.graduationYear) : null,
 
-        // ADD THESE
-        phone: form.phone || null,
-        email: form.email || null,
-        isAvailable: form.available,
+        vetDetails: {
+          phone: form.phone || null,
+          email: form.email || null,
+          isAvailable: form.available,
+        }
       };
       if (editVet) {
         await updateVet(editVet.id, data);
@@ -135,6 +134,7 @@ function Veterinarians({ pets, vets, setVets, petStatuses, reload }) {
     const nameParts = (selected.name || '').trim().split(' ');
     const firstName = nameParts[0] || '';
     const lastName = nameParts.slice(1).join(' ') || '';
+    const isAvailable = selected.isAvailable ?? true;
 
     return (
       <PageLayout
@@ -157,11 +157,11 @@ function Veterinarians({ pets, vets, setVets, petStatuses, reload }) {
                 <div
                   className={styles.availBadge}
                   style={{
-                    background: selected.vetDetails?.isAvailable ? '#d6f5e3' : '#fee2e2',
-                    color: selected.vetDetails?.isAvailable ? '#0e6e3a' : '#b91c1c',
+                    background: isAvailable ? '#d6f5e3' : '#fee2e2',
+                    color: isAvailable ? '#0e6e3a' : '#b91c1c',
                   }}
                 >
-                  {selected.vetDetails?.isAvailable ? 'Available' : 'Unavailable'}
+                  {isAvailable ? 'Available' : 'Unavailable'}
                 </div>
               </div>
             </div>
