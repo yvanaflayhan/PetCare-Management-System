@@ -73,15 +73,21 @@ function Patients({ pets, vets, petTypes, petStatuses, reload }) {
 
   function openEdit(pet) {
     const ps = petStatuses.find(s => s.petId === pet.id);
+
     setForm({
       name: pet.name,
       typeId: String(pet.typeId),
       breed: pet.breed || '',
       age: pet.age || '',
       ownerId: pet.ownerId || '',
+
+      ownerName: pet.owner?.name || '',
+      ownerPhone: pet.owner?.phone || '',
+
       status: ps?.status || 'Waiting',
       assignedVetId: ps?.assignedVetId || '',
     });
+
     setEditPet(pet);
     setShowModal(true);
   }
