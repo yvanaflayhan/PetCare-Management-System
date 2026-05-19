@@ -10,7 +10,7 @@ import {
   createMedicalRecord,
   updateMedicalRecord,
   deleteMedicalRecord,
-} from '../../services/api';
+} from '../../Services/api';
 
 const TODAY = new Date().toISOString().split('T')[0];
 
@@ -183,7 +183,7 @@ function MedicalRecords({ records, pets, vets, reload }) {
         {records.map(rec => {
           const pet = pets.find(p => p.id === rec.petId);
           const vet = vets.find(v => v.id === rec.vetId);
-          const emoji = SPECIES_MAP[pet?.petType?.typeName] || '🐾';
+          const emoji = getPetEmoji(pet?.petType?.typeName);
           return (
             <Card key={rec.id} onClick={() => setSelected(rec)}>
               <div className={styles.cardInner}>
