@@ -44,6 +44,7 @@ export const createVet = (data) => post("/api/veterinarians", data);
 export const updateVet = (id, data) => put(`/api/veterinarians/${id}`, data);
 export const deleteVet = (id) => del(`/api/veterinarians/${id}`);
 export const getArchivedVets = () => get("/api/veterinarians/archived");
+export const restoreVet = (id) => put(`/api/veterinarians/${id}/restore`);
 
 // ─── APPOINTMENTS ─────────────────────────────────────────────────────────────
 export const getAppointments = () => get("/api/appointments");

@@ -12,6 +12,7 @@
   outline: none;
   transition: border 0.15s;
 }
+
 .search:focus {
   border-color: #4a90e2;
 }
@@ -27,6 +28,7 @@
   color: #444;
   margin-bottom: 16px;
 }
+
 .backBtn:hover {
   background: #f4f5f7;
 }
@@ -38,6 +40,7 @@
   gap: 18px;
   margin-top: 12px;
 }
+
 .sectionCard {
   display: flex;
   flex-direction: column;
@@ -45,22 +48,26 @@
   padding: 8px 4px;
   cursor: pointer;
 }
+
 .sectionEmoji {
   font-size: 44px;
   margin-bottom: 10px;
 }
+
 .sectionTitle {
   font-size: 18px;
   font-weight: 600;
   color: #1a1a1a;
   margin-bottom: 6px;
 }
+
 .sectionDesc {
   font-size: 13px;
   color: #666;
   margin-bottom: 12px;
   line-height: 1.4;
 }
+
 .sectionCount {
   font-size: 13px;
   font-weight: 600;
@@ -74,6 +81,7 @@
 .group {
   margin-bottom: 28px;
 }
+
 .groupTitle {
   font-size: 16px;
   font-weight: 600;
@@ -83,6 +91,7 @@
   align-items: center;
   gap: 10px;
 }
+
 .groupList {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -96,30 +105,36 @@
   gap: 12px;
   cursor: pointer;
 }
+
 .archiveEmoji {
   font-size: 32px;
   flex-shrink: 0;
 }
+
 .archiveInfo {
   flex: 1;
   min-width: 0;
 }
+
 .archiveName {
   font-size: 15px;
   font-weight: 600;
   color: #1a1a1a;
   margin-bottom: 2px;
 }
+
 .archiveMeta {
   font-size: 12px;
   color: #666;
   margin-bottom: 2px;
 }
+
 .archiveDiag {
   font-size: 12px;
   color: #b91c1c;
   font-style: italic;
 }
+
 .archiveCount {
   font-size: 11px;
   font-weight: 600;
@@ -136,16 +151,19 @@
   gap: 16px;
   align-items: flex-start;
 }
+
 .profileEmoji {
   font-size: 56px;
   flex-shrink: 0;
 }
+
 .profileName {
   font-size: 22px;
   font-weight: 700;
   color: #1a1a1a;
   margin-bottom: 4px;
 }
+
 .profileMeta {
   font-size: 13px;
   color: #555;
@@ -161,6 +179,7 @@
   border-bottom: 1px solid #ececec;
   padding-bottom: 6px;
 }
+
 .noRec {
   font-size: 13px;
   color: #999;
@@ -174,6 +193,7 @@
   gap: 14px;
   align-items: flex-start;
 }
+
 .recDate {
   font-size: 12px;
   font-weight: 600;
@@ -184,25 +204,30 @@
   flex-shrink: 0;
   white-space: nowrap;
 }
+
 .recBody {
   flex: 1;
 }
+
 .recDiag {
   font-size: 14px;
   font-weight: 600;
   color: #1a1a1a;
   margin-bottom: 2px;
 }
+
 .recMeta {
   font-size: 12px;
   color: #666;
   margin-bottom: 4px;
 }
+
 .recMed {
   font-size: 12px;
   color: #0d6eaa;
   margin-top: 4px;
 }
+
 .recNotes {
   font-size: 12px;
   color: #555;
@@ -216,6 +241,7 @@
   gap: 8px;
   margin-bottom: 10px;
 }
+
 .vetChip {
   background: #eaf3fc;
   color: #0d6eaa;
@@ -224,6 +250,7 @@
   font-size: 12px;
   font-weight: 500;
 }
+
 .vetChip small {
   color: #4a90e2;
   margin-left: 4px;
@@ -236,16 +263,19 @@
   gap: 12px;
   margin-bottom: 10px;
 }
+
 .statBox {
   text-align: center;
   padding: 8px 4px;
 }
+
 .statNum {
   font-size: 26px;
   font-weight: 700;
   color: #4a90e2;
   margin-bottom: 4px;
 }
+
 .statLbl {
   font-size: 12px;
   color: #666;
@@ -263,6 +293,7 @@
   padding: 3px 10px;
   border-radius: 10px;
 }
+
 .absentNote {
   font-size: 12px;
   color: #b91c1c;
@@ -271,36 +302,49 @@
   border-radius: 6px;
   margin-bottom: 10px;
 }
+
 .attendanceGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 8px;
 }
+
 .attendanceCell {
   border-radius: 8px;
   padding: 10px;
   border: 1px solid transparent;
 }
+
 .attendanceCell.present {
   background: #d6f5e3;
   border-color: #b6e5cc;
 }
+
 .attendanceCell.absent {
   background: #fee2e2;
   border-color: #fcc;
 }
+
 .attendanceDate {
   font-size: 12px;
   font-weight: 600;
   color: #333;
   margin-bottom: 4px;
 }
+
 .attendanceState {
   font-size: 13px;
   font-weight: 600;
 }
-.attendanceCell.present .attendanceState { color: #0e6e3a; }
-.attendanceCell.absent .attendanceState  { color: #b91c1c; }
+
+.attendanceCell.present .attendanceState {
+  color: #0e6e3a;
+}
+
+.attendanceCell.absent .attendanceState {
+  color: #b91c1c;
+}
+
 .attendanceNote {
   font-size: 11px;
   color: #555;
@@ -314,4 +358,24 @@
   color: #999;
   font-size: 14px;
   font-style: italic;
+}
+
+.archiveActions {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.restoreBtn {
+  background: #16a34a;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.restoreBtn:hover {
+  background: #15803d;
 }

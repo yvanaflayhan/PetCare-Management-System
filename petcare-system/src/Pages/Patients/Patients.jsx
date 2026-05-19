@@ -10,6 +10,7 @@ import {
   updatePet,
   updatePetStatus,
   deletePet,
+  createOwner
 } from '../../Services/api';
 
 function getPetEmoji(type) {
@@ -45,8 +46,15 @@ function getPetEmoji(type) {
 const STATUSES = ['Waiting', 'In Examination', 'Done', 'Archived'];
 
 const EMPTY_FORM = {
-  name: '', typeId: '', breed: '',
-  age: '', ownerId: '', status: 'Waiting', assignedVetId: ''
+  name: '',
+  typeId: '',
+  breed: '',
+  age: '',
+  ownerName: '',
+  ownerPhone: '',
+  ownerId: '',
+  status: 'Waiting',
+  assignedVetId: ''
 };
 
 function Patients({ pets, vets, petTypes, petStatuses, reload }) {
@@ -84,15 +92,31 @@ function Patients({ pets, vets, petTypes, petStatuses, reload }) {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    if (!form.name || !form.typeId) return;
+    if (!form.name || !form.typeId || !form.ownerName) return;
+
     setSaving(true);
+
     try {
+      // 1. CREATE OWNER FIRST
+      let ownerId = form.ownerId;
+
+      if (!ownerId) {
+        const ownerRes = await createOwner({
+          name: form.ownerName,
+          phone: form.ownerPhone || null,
+          email: null
+        });
+
+        ownerId = ownerRes.id;
+      }
+
+      // 2. CREATE / UPDATE PET
       const petData = {
         name: form.name,
         typeId: parseInt(form.typeId),
         breed: form.breed || null,
         age: form.age ? parseInt(form.age) : null,
-        ownerId: form.ownerId ? parseInt(form.ownerId) : null,
+        ownerId: ownerId,
         isActive: true,
       };
 
@@ -103,6 +127,7 @@ function Patients({ pets, vets, petTypes, petStatuses, reload }) {
         saved = await createPet(petData);
       }
 
+      // 3. STATUS
       await updatePetStatus(saved.id, {
         petId: saved.id,
         status: form.status,
@@ -111,13 +136,13 @@ function Patients({ pets, vets, petTypes, petStatuses, reload }) {
 
       await reload();
       setShowModal(false);
+
     } catch (err) {
       alert('Error saving: ' + err.message);
     } finally {
       setSaving(false);
     }
   }
-
   async function handleArchive(pet) {
     try {
       const ps = petStatuses.find(s => s.petId === pet.id);
@@ -279,6 +304,21 @@ function Patients({ pets, vets, petTypes, petStatuses, reload }) {
               </FormField>
               <FormField label="Age">
                 <input value={form.age} onChange={e => handleChange('age', e.target.value)} placeholder="e.g. 2" />
+              </FormField>
+              <FormField label="Owner Name *">
+                <input
+                  value={form.ownerName}
+                  onChange={e => handleChange('ownerName', e.target.value)}
+                  placeholder="e.g. John Doe"
+                />
+              </FormField>
+
+              <FormField label="Owner Phone *">
+                <input
+                  value={form.ownerPhone}
+                  onChange={e => handleChange('ownerPhone', e.target.value)}
+                  placeholder="e.g. +961..."
+                />
               </FormField>
               <FormField label="Assign Vet">
                 <select value={form.assignedVetId} onChange={e => handleChange('assignedVetId', e.target.value)}>

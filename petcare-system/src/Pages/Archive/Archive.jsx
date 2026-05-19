@@ -3,7 +3,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import styles from './Archive.module.css';
 import Card from '../../Components/Card/Card';
 import PageLayout from '../../Components/Layout/PageLayout';
-import { getArchivedVets } from '../../Services/api';
+import { getArchivedVets, restoreVet } from '../../Services/api';
 
 /* ─────────────── Helpers ─────────────── */
 
@@ -53,9 +53,7 @@ function Archive({
   const [archivedVets, setArchivedVets] = useState([]);
 
   useEffect(() => {
-    if (section === 'vets') {
-      loadArchivedVets();
-    }
+    loadArchivedVets();
   }, [section]);
 
   async function loadArchivedVets() {
@@ -67,6 +65,19 @@ function Archive({
       setArchivedVets([]);
     }
   }
+
+  useEffect(() => {
+    const refreshAttendance = () => {
+      loadArchivedVets(); // optional
+      // if you also have API for attendance history, reload it here
+    };
+
+    window.addEventListener("attendance-updated", refreshAttendance);
+
+    return () => {
+      window.removeEventListener("attendance-updated", refreshAttendance);
+    };
+  }, []);
 
   // Lookup pool: archived vets + active vets, so old records still resolve
   const allVets = useMemo(
@@ -549,6 +560,20 @@ function Archive({
                   </div>
                   <div className={styles.archiveCount}>
                     {totalPatients} patient{totalPatients !== 1 ? 's' : ''}
+                  </div>
+                  <div className={styles.archiveActions}>
+                    <button
+                      className={styles.restoreBtn}
+                      onClick={async (e) => {
+                        e.stopPropagation();
+                        await restoreVet(vet.id);
+
+                        await loadArchivedVets();
+                        window.dispatchEvent(new Event("vets-updated"));
+                      }}
+                    >
+                      Restore
+                    </button>
                   </div>
                 </div>
               </Card>

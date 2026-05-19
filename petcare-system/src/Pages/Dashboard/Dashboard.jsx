@@ -181,6 +181,7 @@ function Dashboard({ pets, vets, appointments, records, petStatuses }) {
     entries.forEach((e) => { log[e.vetId] = e.isPresent; });
     setAttendanceLog({ [TODAY]: log });
     setAttendanceSaved(true);
+    window.dispatchEvent(new Event("attendance-updated"));
   }
 
   const todayAttendance = attendanceLog[TODAY] || {};

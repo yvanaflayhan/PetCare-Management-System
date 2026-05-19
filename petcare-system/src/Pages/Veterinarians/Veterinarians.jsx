@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './Veterinarians.module.css';
 import PageLayout from '../../Components/Layout/PageLayout';
 import Btn from '../../Components/Btn/Btn';
@@ -53,6 +53,16 @@ function Veterinarians({ pets, vets, setVets, petStatuses, reload }) {
     setShowModal(true);
   }
 
+  useEffect(() => {
+    const handler = () => reload();
+
+    window.addEventListener("vets-updated", handler);
+
+    return () => {
+      window.removeEventListener("vets-updated", handler);
+    };
+  }, [reload]);
+
   function handleChange(field, value) { setForm({ ...form, [field]: value }); }
 
   async function handleSubmit(e) {
@@ -84,16 +94,21 @@ function Veterinarians({ pets, vets, setVets, petStatuses, reload }) {
 
   async function handleArchive(id) {
     try {
-      // 1. archive on backend
-      await deleteVet(id);
+      // mark as archived instead of deleting
+      await deleteVet(id, {
+        isArchived: true,
+        status: 'Archived'
+      });
 
-      // 2. refresh main vets list (VERY IMPORTANT)
       await reload();
 
-      // 3. close detail view if open
       if (selected?.id === id) {
         setSelected(null);
       }
+
+      // sync archive page
+      window.dispatchEvent(new Event("vets-updated"));
+      window.dispatchEvent(new Event("archive-updated"));
 
     } catch (err) {
       alert('Error archiving vet: ' + err.message);
