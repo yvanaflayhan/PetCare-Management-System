@@ -20,8 +20,8 @@ namespace Backend.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var statuses = await _db
-                .PetStatuses.Include(ps => ps.Pet)
+            var statuses = await _db.PetStatuses
+                .Include(ps => ps.Pet)
                 .Include(ps => ps.AssignedVet)
                 .ToListAsync();
 
@@ -37,26 +37,19 @@ namespace Backend.Controllers
             if (status == null)
             {
                 // create it if it doesn't exist yet
-                updated.PetId = petId;
+                updated.PetId     = petId;
                 updated.UpdatedAt = DateTime.Now;
                 _db.PetStatuses.Add(updated);
             }
             else
             {
-                status.Status = updated.Status;
+                status.Status        = updated.Status;
                 status.AssignedVetId = updated.AssignedVetId;
-                status.UpdatedAt = DateTime.Now;
+                status.UpdatedAt     = DateTime.Now;
             }
 
             await _db.SaveChangesAsync();
-            return Ok(
-                new
-                {
-                    message = "Status updated",
-                    petId,
-                    status = updated.Status,
-                }
-            );
+            return Ok(new { message = "Status updated", petId, status = updated.Status });
         }
     }
 }
