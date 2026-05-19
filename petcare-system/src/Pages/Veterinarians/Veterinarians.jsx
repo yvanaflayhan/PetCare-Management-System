@@ -43,9 +43,9 @@ function Veterinarians({ pets, vets, setVets, petStatuses, reload }) {
       specialty: vet.specialization || 'General Practice',
       university: vet.university || '',
       graduationYear: vet.graduationYear || '',
-      pphone: vet.vetDetails?.phone || '',
+      phone: vet.vetDetails?.phone || '',
       email: vet.vetDetails?.email || '',
-      available: vet.isAvailable ?? true,
+      available: vet.vetDetails?.isAvailable ?? true,
       status: 'Active',
       animalExpertise: [],
     });
@@ -101,10 +101,7 @@ function Veterinarians({ pets, vets, setVets, petStatuses, reload }) {
   async function handleArchive(id) {
     try {
       // mark as archived instead of deleting
-      await deleteVet(id, {
-        isArchived: true,
-        status: 'Archived'
-      });
+      await deleteVet(id);
 
       await reload();
 

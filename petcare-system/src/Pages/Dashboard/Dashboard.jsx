@@ -168,9 +168,16 @@ function Dashboard({ pets, vets, appointments, records, petStatuses }) {
     getTodayAttendance()
       .then((data) => {
         const log = {};
-        data.forEach((a) => { log[a.vetId] = a.isPresent; });
-        setAttendanceLog({ [TODAY]: log });
-        if (data.length > 0) setAttendanceSaved(true);
+        data.forEach((a) => {
+          log[a.vetId] = a.isPresent;
+        });
+
+        setAttendanceLog((prev) => ({
+          ...prev,
+          [TODAY]: log,
+        }));
+
+        setAttendanceSaved(data.length > 0);
       })
       .catch(() => { });
   }, []);
@@ -190,7 +197,9 @@ function Dashboard({ pets, vets, appointments, records, petStatuses }) {
   // merge pets with their real statuses from backend
   const petsWithStatus = pets.map((pet) => {
     console.log(pet);
-    const ps = petStatuses.find((s) => s.petId === pet.id);
+    const ps = petStatuses.find(
+      (s) => Number(s.petId) === Number(pet.id)
+    );
     return { ...pet, currentStatus: ps?.status || 'Waiting', assignedVetId: ps?.assignedVetId };
   });
 
@@ -200,9 +209,11 @@ function Dashboard({ pets, vets, appointments, records, petStatuses }) {
   const inExam = petsWithStatus.filter((p) => p.currentStatus === 'In Examination').length;
   const inHouse = waiting + inExam;
 
+  const todayStr = TODAY;
+
   const todayAppts = appointments.filter((a) => {
     if (!a.date) return false;
-    return new Date(a.date).toISOString().split('T')[0] === TODAY;
+    return a.date.split('T')[0] === todayStr;
   });
 
   const recentRecs = [...records].reverse().slice(0, 4);
@@ -332,25 +343,34 @@ function Dashboard({ pets, vets, appointments, records, petStatuses }) {
             </div>
 
             {vets.map((v) => {
-              const present = !!todayAttendance[v.id];
+              const isPresent = !!todayAttendance[v.id];
+              const isAvailable = v.vetDetails?.isAvailable ?? true;
+
               return (
                 <div key={v.id} className={styles.staffRow}>
+
                   <div
                     className={styles.staffAvatar}
                     style={{
-                      background: present ? '#0d2b36' : '#e8f0f4',
-                      color: present ? '#fff' : '#7a9baa',
+                      background: isPresent ? '#0d2b36' : '#e8f0f4',
+                      color: isPresent ? '#fff' : '#7a9baa',
                     }}
                   >
                     {getInitials(v.name)}
                   </div>
+
                   <div className={styles.staffInfo}>
                     <div className={styles.staffName}>{v.name}</div>
                     <div className={styles.staffRole}>{v.specialization || 'General'}</div>
                   </div>
-                  <div className={`${styles.presentDot} ${present ? styles.presentDotOn : styles.presentDotOff}`}>
-                    {present ? 'Present' : 'Absent'}
+
+                  <div
+                    className={`${styles.presentDot} ${isPresent ? styles.presentDotOn : styles.presentDotOff
+                      }`}
+                  >
+                    {isPresent ? 'Present' : 'Absent'}
                   </div>
+
                 </div>
               );
             })}
@@ -374,7 +394,7 @@ function Dashboard({ pets, vets, appointments, records, petStatuses }) {
               .filter((p) => p.currentStatus === 'Waiting' || p.currentStatus === 'In Examination')
               .map((pet) => {
                 const vet = vets.find((v) => v.id === pet.assignedVetId);
-                const sc = STATUS_STYLE[pet.currentStatus];
+                const sc = STATUS_STYLE[pet.currentStatus] || STATUS_STYLE.Waiting;
                 return (
                   <div key={pet.id} className={styles.patientRow}>
                     <div className={styles.patientEmoji}>
