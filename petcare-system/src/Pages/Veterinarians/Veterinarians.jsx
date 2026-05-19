@@ -21,7 +21,7 @@ const EMPTY_FORM = {
   available: true, status: 'Active'
 };
 
-const SPECIES_MAP = { Dog:'🐶', Cat:'🐱', Rabbit:'🐰', Bird:'🐦', Hamster:'🐹', Reptile:'🦎', Fish:'🐠' };
+const SPECIES_MAP = { Dog: '🐶', Cat: '🐱', Rabbit: '🐰', Bird: '🐦', Hamster: '🐹', Reptile: '🦎', Fish: '🐠' };
 
 function getInitials(f, l) {
   return `${f?.[0] || ''}${l?.[0] || ''}`.toUpperCase();
@@ -34,26 +34,26 @@ function Veterinarians({
   reload
 }) {
   const [showModal, setShowModal] = useState(false);
-  const [editVet, setEditVet]     = useState(null);
-  const [selected, setSelected]   = useState(null);
-  const [form, setForm]           = useState(EMPTY_FORM);
-  const [saving, setSaving]       = useState(false);
+  const [editVet, setEditVet] = useState(null);
+  const [selected, setSelected] = useState(null);
+  const [form, setForm] = useState(EMPTY_FORM);
+  const [saving, setSaving] = useState(false);
 
   function openAdd() { setForm(EMPTY_FORM); setEditVet(null); setShowModal(true); }
 
   function openEdit(vet) {
     const parts = (vet.name || '').trim().split(' ');
     setForm({
-      firstName:      parts[0] || '',
-      lastName:       parts.slice(1).join(' ') || '',
-      role:           vet.role           || 'Veterinarian',
-      specialty:      vet.specialization || 'General Practice',
-      university:     vet.university     || '',
+      firstName: parts[0] || '',
+      lastName: parts.slice(1).join(' ') || '',
+      role: vet.role || 'Veterinarian',
+      specialty: vet.specialization || 'General Practice',
+      university: vet.university || '',
       graduationYear: vet.graduationYear || '',
-      phone:          vet.vetDetails?.phone || '',
-      email:          vet.vetDetails?.email || '',
-      available:      true,
-      status:         'Active',
+      phone: vet.vetDetails?.phone || vet.phone || '',
+      email: vet.vetDetails?.email || vet.email || '',
+      available: vet.vetDetails?.isAvailable ?? true,
+      status: 'Active',
       animalExpertise: [],
     });
     setEditVet(vet);
@@ -68,11 +68,17 @@ function Veterinarians({
     setSaving(true);
     try {
       const data = {
-        name:           `${form.firstName} ${form.lastName}`,
-        role:           form.role,
+        name: `${form.firstName} ${form.lastName}`,
+        role: form.role,
         specialization: form.specialty || null,
-        university:     form.university || null,
+        university: form.university || null,
         graduationYear: form.graduationYear ? parseInt(form.graduationYear) : null,
+
+        vetDetails: {
+          phone: form.phone || null,
+          email: form.email || null,
+          isAvailable: form.available,
+        }
       };
       if (editVet) {
         await updateVet(editVet.id, data);
@@ -116,11 +122,11 @@ function Veterinarians({
 
   /* ── DETAIL PAGE ─────────────────────────────────────────────────────────── */
   if (selected) {
-    const vetPets   = getVetPatients(selected);
+    const vetPets = getVetPatients(selected);
     const nameParts = (selected.name || '').trim().split(' ');
     const firstName = nameParts[0] || '';
-    const lastName  = nameParts.slice(1).join(' ') || '';
-    const present   = isPresent(selected.id);
+    const lastName = nameParts.slice(1).join(' ') || '';
+    const present = isPresent(selected.id);
 
     return (
       <PageLayout
@@ -143,7 +149,7 @@ function Veterinarians({
                   className={styles.availBadge}
                   style={{
                     background: present ? '#d6f5e3' : '#fee2e2',
-                    color:      present ? '#0e6e3a' : '#b91c1c',
+                    color: present ? '#0e6e3a' : '#b91c1c',
                   }}
                 >
                   {present ? '✅ Available (Present Today)' : '❌ Unavailable (Absent Today)'}
@@ -209,11 +215,11 @@ function Veterinarians({
         )}
 
         {vets.map(vet => {
-          const count    = getVetPatients(vet).length;
+          const count = getVetPatients(vet).length;
           const nameParts = (vet.name || '').trim().split(' ');
-          const fName    = nameParts[0] || '';
-          const lName    = nameParts.slice(1).join(' ') || '';
-          const present  = isPresent(vet.id);
+          const fName = nameParts[0] || '';
+          const lName = nameParts.slice(1).join(' ') || '';
+          const present = isPresent(vet.id);
 
           return (
             <Card key={vet.id} onClick={() => setSelected(vet)}>
@@ -233,7 +239,7 @@ function Veterinarians({
                   fontSize: 11, fontWeight: 600,
                   padding: '2px 10px', borderRadius: 20, marginBottom: 8,
                   background: present ? '#d6f5e3' : '#fee2e2',
-                  color:      present ? '#0e6e3a' : '#b91c1c',
+                  color: present ? '#0e6e3a' : '#b91c1c',
                 }}
               >
                 {present ? 'Available' : 'Unavailable'}
@@ -301,10 +307,10 @@ function Veterinarians({
 
 function getStatusStyle(status) {
   const map = {
-    Waiting:          { background: '#fff0cc', color: '#7a5000' },
+    Waiting: { background: '#fff0cc', color: '#7a5000' },
     'In Examination': { background: '#d6f5e3', color: '#0e6e3a' },
-    Done:             { background: '#e8f4fb', color: '#0d6eaa' },
-    Archived:         { background: '#ececec', color: '#555'    },
+    Done: { background: '#e8f4fb', color: '#0d6eaa' },
+    Archived: { background: '#ececec', color: '#555' },
   };
   return map[status] || map.Waiting;
 }

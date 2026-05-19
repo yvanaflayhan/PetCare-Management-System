@@ -2,20 +2,22 @@
   height: 40px;
   padding: 0 20px;
   border-radius: 10px;
-  background: #0d2b36;
+  background: transparent;
   border: none;
-  color: #ffffff;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
-  transition: background 0.2s, opacity 0.2s;
-  white-space: nowrap;
+  transition: 0.2s;
 }
 
-.btn:hover { background: #37707b; }
+.btn:hover {
+  background: #37707b;
+}
 
-.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 
 .secondary {
   background: transparent;
@@ -23,14 +25,19 @@
   color: #7a9baa;
 }
 
-.secondary:hover { background: #f4f8fa; }
+.secondary:hover {
+  background: #f4f8fa;
+}
 
 .danger {
   background: #fee2e2;
   color: #b91c1c;
 }
 
-.danger:hover { background: #fecaca; }
+.danger:hover {
+  background: #fecaca;
+}
+
 .edit {
   background: #eef7fb;
   color: #0d6eaa;

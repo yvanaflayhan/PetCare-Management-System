@@ -1,5 +1,8 @@
+/* Veterinarians.module.css */
+
 .grid {
   display: grid;
+  /* Keeps cards matching your exact structural requirements */
   grid-template-columns: repeat(auto-fit, minmax(360px, 420px));
   gap: 24px;
   justify-content: center;
@@ -11,16 +14,20 @@
   color: #7a9baa;
 }
 
+/* ── CARD TOP & HEADERS ─────────────────────────────────────────────────── */
 .cardTop {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 14px;
+  margin-bottom: 14px;
 }
 
 .cardAvatar {
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  border-radius: 12px; /* Switched to a modern squircle profile */
   background: #0d2b36;
   color: white;
   display: flex;
@@ -28,109 +35,142 @@
   justify-content: center;
   font-weight: 700;
   font-size: 16px;
+  box-shadow: 0 4px 10px rgba(13, 43, 54, 0.15);
 }
 
 .cardActions {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   align-items: center;
 }
 
-.editBtn,
-.archiveBtn {
-  width: 34px;
-  height: 34px;
+/* ── ACTIONS & BUTTON SIGNALS ───────────────────────────────────────────── */
+/* Edit button is now distinct and vibrant red */
+.editBtn {
+  height: 32px;
+  padding: 0 12px;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
   transition: all 0.2s ease;
-  background: transparent;
-  border: 1px solid #e6eef2;
-}
-
-.editBtn {
-  color: #3bb8d4;
-  background: #f4fbfd;
+  color: #ffffff;
+  background: #ef4444;
+  box-shadow: 0 2px 6px rgba(239, 68, 68, 0.2);
 }
 
 .editBtn:hover {
-  background: #e8f7fb;
-  transform: translateY(-2px);
+  background: #dc2626;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
 }
 
 .archiveBtn {
-  color: #ef4444;
-  background: #fff5f5;
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  color: #64748b;
+  background: #ffffff;
 }
 
 .archiveBtn:hover {
-  background: #ffecec;
-  transform: translateY(-2px);
+  background: #f8fafc;
+  color: #0d2b36;
+  border-color: #cbd5e1;
+  transform: translateY(-1px);
 }
 
+/* ── TEXT & PRIMARY STAFF INFO ─────────────────────────────────────────── */
 .cardName {
-  margin-top: 14px;
-  font-size: 18px;
+  font-size: 19px;
   font-weight: 700;
   color: #0d2b36;
+  line-height: 1.2;
 }
 
 .cardSpecialty {
   color: #3ec8e0;
-  margin-top: 4px;
-  font-size: 14px;
+  margin-top: 3px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
+/* Streamlined meta layout using clean inline dividers instead of long vertical stacked lists */
 .cardMetaSimple {
-  margin-top: 14px;
+  margin-top: 12px;
   display: flex;
-  flex-direction: column;
-  gap: 5px;
-  color: #7a9baa;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  color: #64748b;
   font-size: 13px;
+}
+
+.cardMetaSimple div:not(:last-child)::after {
+  content: "•";
+  margin-left: 8px;
+  color: #cbd5e1;
 }
 
 .cardPatients {
-  margin-top: 16px;
-  background: #f4f8fa;
-  padding: 10px 14px;
-  border-radius: 12px;
-  font-size: 13px;
+  margin-top: 14px;
+  background: #f8fafc;
+  border: 1px solid #f1f5f9;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
   font-weight: 600;
-  color: #0d2b36;
+  color: #475569;
+  display: inline-flex;
+  align-items: center;
 }
 
+/* ── DETAIL VIEW ────────────────────────────────────────────────────────── */
 .backButtonWrap {
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 .detailWrap {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
 }
 
 .profileHeader {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 24px;
   flex-wrap: wrap;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 20px;
 }
 
 .profileAvatar {
-  width: 78px;
-  height: 78px;
-  border-radius: 50%;
+  width: 72px;
+  height: 72px;
+  border-radius: 16px;
   background: #0d2b36;
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 700;
+  box-shadow: 0 6px 16px rgba(13, 43, 54, 0.2);
 }
 
 .profileMain {
@@ -138,24 +178,29 @@
 }
 
 .profileName {
-  font-size: 26px;
-  font-weight: 700;
+  font-size: 24px;
+  font-weight: 800;
   color: #0d2b36;
 }
 
 .profileSpecialty {
-  margin-top: 4px;
+  margin-top: 2px;
   color: #3ec8e0;
-  font-size: 15px;
+  font-size: 14px;
+  font-weight: 600;
 }
 
+/* Compact background wrapper tag */
 .availBadge {
-  margin-top: 10px;
-  display: inline-block;
-  padding: 6px 12px;
-  border-radius: 30px;
-  font-size: 12px;
-  font-weight: 600;
+  margin-top: 8px;
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .profileActions {
@@ -163,38 +208,44 @@
 }
 
 .simpleInfo {
-  margin-top: 28px;
+  margin-top: 20px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
 }
 
 .simpleInfo div {
-  background: #f8fbfc;
-  border-radius: 14px;
-  padding: 14px;
-  color: #0d2b36;
-  font-size: 14px;
+  background: #f8fafc;
+  border: 1px solid #f1f5f9;
+  border-radius: 10px;
+  padding: 12px 14px;
+  color: #1e293b;
+  font-size: 13.5px;
 }
 
 .simpleInfo span {
   display: block;
-  color: #7a9baa;
-  font-size: 12px;
-  margin-bottom: 5px;
-  font-weight: 600;
+  color: #94a3b8;
+  font-size: 11px;
+  margin-bottom: 3px;
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
+/* ── ASSIGNED PATIENTS LIST & SMALL BADGES ───────────────────────── */
 .sectionTitle {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
   color: #0d2b36;
-  margin-top: 8px;
+  margin-top: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .noPatients {
-  color: #7a9baa;
+  color: #94a3b8;
   font-size: 14px;
+  padding: 20px 0;
 }
 
 .patientRow {
@@ -202,6 +253,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
+  padding: 4px 0;
 }
 
 .patientLeft {
@@ -211,43 +263,58 @@
 }
 
 .patientEmoji {
-  font-size: 26px;
+  font-size: 22px;
+  background: #f1f5f9;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
 }
 
 .patientName {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
   color: #0d2b36;
 }
 
 .patientMeta {
-  font-size: 13px;
-  color: #7a9baa;
-  margin-top: 3px;
-}
-
-.statusPill {
-  padding: 6px 12px;
-  border-radius: 30px;
   font-size: 12px;
-  font-weight: 600;
+  color: #64748b;
+  margin-top: 1px;
 }
 
+/* Clean, compact pill styles instead of broad layout blocks */
+.statusPill {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 6px; 
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+/* ── FORM LAYOUT & MODALS ───────────────────────────────────────────────── */
 .formGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 14px;
+  gap: 16px;
 }
 
 .modalActions {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
-  margin-top: 22px;
+  margin-top: 24px;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 16px;
 }
 
+/* ── RESPONSIVE RESPONSIVENESS BREAKPOINTS ──────────────────────────────── */
 @media (max-width: 900px) {
-
   .formGrid {
     grid-template-columns: 1fr;
   }
@@ -255,10 +322,10 @@
   .profileHeader {
     flex-direction: column;
     align-items: flex-start;
+    gap: 16px;
   }
 
   .profileActions {
     margin-left: 0;
   }
-
 }
