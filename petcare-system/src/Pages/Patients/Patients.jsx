@@ -10,7 +10,8 @@ import {
   updatePet,
   updatePetStatus,
   deletePet,
-  createOwner
+  createOwner,
+  updateOwner
 } from '../../Services/api';
 
 function getPetEmoji(type) {
@@ -107,6 +108,7 @@ function Patients({ pets, vets, petTypes, petStatuses, reload }) {
       let ownerId = form.ownerId;
 
       if (!ownerId) {
+        // CREATE owner (new patient)
         const ownerRes = await createOwner({
           name: form.ownerName,
           phone: form.ownerPhone || null,
@@ -114,6 +116,13 @@ function Patients({ pets, vets, petTypes, petStatuses, reload }) {
         });
 
         ownerId = ownerRes.id;
+      } else {
+        // UPDATE owner (edit patient)
+        await updateOwner(ownerId, {
+          name: form.ownerName,
+          phone: form.ownerPhone || null,
+          email: null
+        });
       }
 
       // 2. CREATE / UPDATE PET
