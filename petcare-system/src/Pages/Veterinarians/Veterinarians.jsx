@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styles from './Veterinarians.module.css';
 import PageLayout from '../../Components/Layout/PageLayout';
 import Btn from '../../Components/Btn/Btn';
 import Card from '../../Components/Card/Card';
 import Modal from '../../Components/Modal/Modal';
 import FormField from '../../Components/Form/Formfield';
+import { Pencil, Archive } from 'lucide-react';
 import { createVet, updateVet, deleteVet } from '../../Services/api';
-const SPECIALTIES = [
-  'General Practice', 'Surgery', 'Cardiology',
-  'Dentistry', 'Behavior & Training', 'Emergency Care', 'Exotic Animals'
-];
 
+const SPECIALTIES = [
+  'General Practice', 'Surgery', 'Dermatology', 'Cardiology',
+  'Dentistry', 'Nutrition', 'Behavior & Training', 'Emergency Care', 'Exotic Animals'
+];
 const ROLES = ['Veterinarian', 'Trainer', 'Intern', 'Technician'];
 
 const EMPTY_FORM = {
@@ -20,48 +21,44 @@ const EMPTY_FORM = {
   available: true, status: 'Active'
 };
 
+const SPECIES_MAP = { Dog:'🐶', Cat:'🐱', Rabbit:'🐰', Bird:'🐦', Hamster:'🐹', Reptile:'🦎', Fish:'🐠' };
+
 function getInitials(f, l) {
   return `${f?.[0] || ''}${l?.[0] || ''}`.toUpperCase();
 }
 
-function Veterinarians({ pets, vets, setVets, petStatuses, reload }) {
+function Veterinarians({
+  pets, vets, setVets, petStatuses,
+  todayAttendance,           // { vetId: true/false } from App
+  archivedVets, setArchivedVets,
+  reload
+}) {
   const [showModal, setShowModal] = useState(false);
-  const [editVet, setEditVet] = useState(null);
-  const [selected, setSelected] = useState(null);
-  const [form, setForm] = useState(EMPTY_FORM);
-  const [saving, setSaving] = useState(false);
+  const [editVet, setEditVet]     = useState(null);
+  const [selected, setSelected]   = useState(null);
+  const [form, setForm]           = useState(EMPTY_FORM);
+  const [saving, setSaving]       = useState(false);
 
   function openAdd() { setForm(EMPTY_FORM); setEditVet(null); setShowModal(true); }
 
   function openEdit(vet) {
-    // split name into firstName/lastName for the form
     const parts = (vet.name || '').trim().split(' ');
     setForm({
-      firstName: parts[0] || '',
-      lastName: parts.slice(1).join(' ') || '',
-      role: vet.role || 'Veterinarian',
-      specialty: vet.specialization || 'General Practice',
-      university: vet.university || '',
+      firstName:      parts[0] || '',
+      lastName:       parts.slice(1).join(' ') || '',
+      role:           vet.role           || 'Veterinarian',
+      specialty:      vet.specialization || 'General Practice',
+      university:     vet.university     || '',
       graduationYear: vet.graduationYear || '',
-      phone: vet.vetDetails?.phone || '',
-      email: vet.vetDetails?.email || '',
-      available: vet.vetDetails?.isAvailable ?? true,
-      status: 'Active',
+      phone:          vet.vetDetails?.phone || '',
+      email:          vet.vetDetails?.email || '',
+      available:      true,
+      status:         'Active',
       animalExpertise: [],
     });
     setEditVet(vet);
     setShowModal(true);
   }
-
-  useEffect(() => {
-    const handler = () => reload();
-
-    window.addEventListener("vets-updated", handler);
-
-    return () => {
-      window.removeEventListener("vets-updated", handler);
-    };
-  }, [reload]);
 
   function handleChange(field, value) { setForm({ ...form, [field]: value }); }
 
@@ -71,17 +68,11 @@ function Veterinarians({ pets, vets, setVets, petStatuses, reload }) {
     setSaving(true);
     try {
       const data = {
-        name: `${form.firstName} ${form.lastName}`,
-        role: form.role,
+        name:           `${form.firstName} ${form.lastName}`,
+        role:           form.role,
         specialization: form.specialty || null,
-        university: form.university || null,
+        university:     form.university || null,
         graduationYear: form.graduationYear ? parseInt(form.graduationYear) : null,
-
-        vetDetails: {
-          phone: form.phone || null,
-          email: form.email || null,
-          isAvailable: form.available,
-        }
       };
       if (editVet) {
         await updateVet(editVet.id, data);
@@ -98,23 +89,16 @@ function Veterinarians({ pets, vets, setVets, petStatuses, reload }) {
     }
   }
 
-  async function handleArchive(id) {
+  // Archive = remove from active list, keep in archivedVets for Archive page
+  async function handleArchive(vet) {
     try {
-      // mark as archived instead of deleting
-      await deleteVet(id);
-
+      await deleteVet(vet.id);
+      // add to archived list so Archive page can show it
+      setArchivedVets(prev => [...prev, { ...vet, archivedAt: new Date().toISOString().split('T')[0] }]);
       await reload();
-
-      if (selected?.id === id) {
-        setSelected(null);
-      }
-
-      // sync archive page
-      window.dispatchEvent(new Event("vets-updated"));
-      window.dispatchEvent(new Event("archive-updated"));
-
+      if (selected?.id === vet.id) setSelected(null);
     } catch (err) {
-      alert('Error archiving vet: ' + err.message);
+      alert('Error archiving: ' + err.message);
     }
   }
 
@@ -125,13 +109,18 @@ function Veterinarians({ pets, vets, setVets, petStatuses, reload }) {
       .filter(Boolean);
   }
 
+  // availability comes from todayAttendance (from Dashboard), not backend field
+  function isPresent(vetId) {
+    return !!todayAttendance[vetId];
+  }
+
   /* ── DETAIL PAGE ─────────────────────────────────────────────────────────── */
   if (selected) {
-    const vetPets = getVetPatients(selected);
+    const vetPets   = getVetPatients(selected);
     const nameParts = (selected.name || '').trim().split(' ');
     const firstName = nameParts[0] || '';
-    const lastName = nameParts.slice(1).join(' ') || '';
-    const isAvailable = selected.isAvailable ?? true;
+    const lastName  = nameParts.slice(1).join(' ') || '';
+    const present   = isPresent(selected.id);
 
     return (
       <PageLayout
@@ -145,20 +134,19 @@ function Veterinarians({ pets, vets, setVets, petStatuses, reload }) {
         <div className={styles.detailWrap}>
           <Card>
             <div className={styles.profileHeader}>
-              <div className={styles.profileAvatar}>
-                {getInitials(firstName, lastName)}
-              </div>
+              <div className={styles.profileAvatar}>{getInitials(firstName, lastName)}</div>
               <div className={styles.profileMain}>
                 <div className={styles.profileName}>Dr. {firstName} {lastName}</div>
                 <div className={styles.profileSpecialty}>{selected.specialization || '—'}</div>
+                {/* availability = today's attendance */}
                 <div
                   className={styles.availBadge}
                   style={{
-                    background: isAvailable ? '#d6f5e3' : '#fee2e2',
-                    color: isAvailable ? '#0e6e3a' : '#b91c1c',
+                    background: present ? '#d6f5e3' : '#fee2e2',
+                    color:      present ? '#0e6e3a' : '#b91c1c',
                   }}
                 >
-                  {isAvailable ? 'Available' : 'Unavailable'}
+                  {present ? '✅ Available (Present Today)' : '❌ Unavailable (Absent Today)'}
                 </div>
               </div>
             </div>
@@ -182,13 +170,12 @@ function Veterinarians({ pets, vets, setVets, petStatuses, reload }) {
 
           {vetPets.map(pet => {
             const ps = petStatuses.find(s => s.petId === pet.id);
-            const species = { Dog: '🐶', Cat: '🐱', Rabbit: '🐰', Bird: '🐦', Hamster: '🐹', Reptile: '🦎', Fish: '🐠' };
             return (
               <Card key={pet.id}>
                 <div className={styles.patientRow}>
                   <div className={styles.patientLeft}>
                     <span className={styles.patientEmoji}>
-                      {species[pet.petType?.typeName] || '🐾'}
+                      {SPECIES_MAP[pet.petType?.typeName] || '🐾'}
                     </span>
                     <div>
                       <div className={styles.patientName}>{pet.name}</div>
@@ -222,27 +209,35 @@ function Veterinarians({ pets, vets, setVets, petStatuses, reload }) {
         )}
 
         {vets.map(vet => {
-          const count = getVetPatients(vet).length;
+          const count    = getVetPatients(vet).length;
           const nameParts = (vet.name || '').trim().split(' ');
-          const fName = nameParts[0] || '';
-          const lName = nameParts.slice(1).join(' ') || '';
+          const fName    = nameParts[0] || '';
+          const lName    = nameParts.slice(1).join(' ') || '';
+          const present  = isPresent(vet.id);
 
           return (
             <Card key={vet.id} onClick={() => setSelected(vet)}>
               <div className={styles.cardTop}>
                 <div className={styles.cardAvatar}>{getInitials(fName, lName)}</div>
                 <div className={styles.cardActions} onClick={e => e.stopPropagation()}>
-                  <Btn variant="edit" onClick={() => openEdit(vet)}>
-                    Edit
-                  </Btn>
-
-                  <Btn variant="danger" onClick={() => handleArchive(vet.id)}>
-                    Archive
-                  </Btn>
+                  <Btn onClick={() => openEdit(vet)}>Edit</Btn>
+                  <Btn variant="secondary" onClick={() => handleArchive(vet)}>Archive</Btn>
                 </div>
               </div>
               <div className={styles.cardName}>Dr. {fName} {lName}</div>
               <div className={styles.cardSpecialty}>{vet.specialization || 'General'}</div>
+              {/* availability badge on card */}
+              <div
+                style={{
+                  display: 'inline-block',
+                  fontSize: 11, fontWeight: 600,
+                  padding: '2px 10px', borderRadius: 20, marginBottom: 8,
+                  background: present ? '#d6f5e3' : '#fee2e2',
+                  color:      present ? '#0e6e3a' : '#b91c1c',
+                }}
+              >
+                {present ? 'Available' : 'Unavailable'}
+              </div>
               <div className={styles.cardMetaSimple}>
                 <div>{vet.role}</div>
                 <div>{vet.university || '—'}</div>
@@ -259,7 +254,7 @@ function Veterinarians({ pets, vets, setVets, petStatuses, reload }) {
       {/* MODAL */}
       {showModal && (
         <Modal
-          title={editVet ? '✏️ Edit Member' : ' Add Member'}
+          title={editVet ? '✏️ Edit Member' : '➕ Add Member'}
           onClose={() => setShowModal(false)}
         >
           <form onSubmit={handleSubmit}>
@@ -292,12 +287,6 @@ function Veterinarians({ pets, vets, setVets, petStatuses, reload }) {
               <FormField label="Email">
                 <input value={form.email} onChange={e => handleChange('email', e.target.value)} placeholder="example@email.com" />
               </FormField>
-              <FormField label="Availability">
-                <select value={form.available ? 'yes' : 'no'} onChange={e => handleChange('available', e.target.value === 'yes')}>
-                  <option value="yes">Available</option>
-                  <option value="no">Unavailable</option>
-                </select>
-              </FormField>
             </div>
             <div className={styles.modalActions}>
               <Btn variant="secondary" onClick={() => setShowModal(false)}>Cancel</Btn>
@@ -312,10 +301,10 @@ function Veterinarians({ pets, vets, setVets, petStatuses, reload }) {
 
 function getStatusStyle(status) {
   const map = {
-    Waiting: { background: '#fff0cc', color: '#7a5000' },
+    Waiting:          { background: '#fff0cc', color: '#7a5000' },
     'In Examination': { background: '#d6f5e3', color: '#0e6e3a' },
-    Done: { background: '#e8f4fb', color: '#0d6eaa' },
-    Archived: { background: '#ececec', color: '#555' },
+    Done:             { background: '#e8f4fb', color: '#0d6eaa' },
+    Archived:         { background: '#ececec', color: '#555'    },
   };
   return map[status] || map.Waiting;
 }

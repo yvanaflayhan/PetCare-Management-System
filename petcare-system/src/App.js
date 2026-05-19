@@ -11,10 +11,12 @@ import Archive         from './Pages/Archive/Archive';
 
 import {
   getPets, getVets, getAppointments,
-  getMedicalRecords, getAllPetStatuses, getPetTypes
+  getMedicalRecords, getAllPetStatuses, getPetTypes,
+  getTodayAttendance
 } from './Services/api';
 
 const IDLE_TIMEOUT = 3 * 60 * 1000;
+const TODAY = new Date().toISOString().split('T')[0];
 
 function App() {
   const [showSplash, setShowSplash]     = useState(true);
@@ -23,6 +25,7 @@ function App() {
 
   const [pets, setPets]                 = useState([]);
   const [vets, setVets]                 = useState([]);
+  const [archivedVets, setArchivedVets] = useState([]); // vets removed from active list
   const [appointments, setAppointments] = useState([]);
   const [records, setRecords]           = useState([]);
   const [petStatuses, setPetStatuses]   = useState([]);
@@ -30,17 +33,21 @@ function App() {
   const [loading, setLoading]           = useState(true);
   const [error, setError]               = useState(null);
 
-  // load everything from backend on startup
+  // ── ATTENDANCE: lifted to App so all pages share it ──────────────────────
+  const [todayAttendance, setTodayAttendance] = useState({}); // { vetId: isPresent }
+  const [attendanceSaved, setAttendanceSaved] = useState(false);
+
   async function loadAll() {
     try {
       setLoading(true);
-      const [p, v, a, r, ps, pt] = await Promise.all([
+      const [p, v, a, r, ps, pt, att] = await Promise.all([
         getPets(),
         getVets(),
         getAppointments(),
         getMedicalRecords(),
         getAllPetStatuses(),
         getPetTypes(),
+        getTodayAttendance(),
       ]);
       setPets(p);
       setVets(v);
@@ -48,8 +55,16 @@ function App() {
       setRecords(r);
       setPetStatuses(ps);
       setPetTypes(pt);
+
+      // build attendance map from backend
+      if (att && att.length > 0) {
+        const log = {};
+        att.forEach(a => { log[a.vetId] = a.isPresent; });
+        setTodayAttendance(log);
+        setAttendanceSaved(true);
+      }
     } catch (err) {
-      setError("Cannot connect to server. Is the backend running?");
+      setError('Cannot connect to server. Is the backend running?');
     } finally {
       setLoading(false);
     }
@@ -57,7 +72,13 @@ function App() {
 
   useEffect(() => { loadAll(); }, []);
 
-  // idle timer — re-show splash after 3 min of no activity
+  // called by Dashboard when user saves attendance
+  function handleAttendanceSaved(log) {
+    setTodayAttendance(log);
+    setAttendanceSaved(true);
+  }
+
+  // idle timer
   const resetIdle = useCallback(() => {
     if (showSplash) return;
     clearTimeout(window._idleTimer);
@@ -66,21 +87,19 @@ function App() {
 
   useEffect(() => {
     const events = ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'];
-    events.forEach((e) => window.addEventListener(e, resetIdle));
+    events.forEach(e => window.addEventListener(e, resetIdle));
     resetIdle();
     return () => {
-      events.forEach((e) => window.removeEventListener(e, resetIdle));
+      events.forEach(e => window.removeEventListener(e, resetIdle));
       clearTimeout(window._idleTimer);
     };
   }, [resetIdle]);
 
-  if (showSplash) {
-    return <SplashScreen onDone={() => setShowSplash(false)} />;
-  }
+  if (showSplash) return <SplashScreen onDone={() => setShowSplash(false)} />;
 
   if (loading) {
     return (
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', fontFamily: 'DM Sans, sans-serif', color: '#7a9baa', fontSize: 16 }}>
+      <div style={{ display:'flex', alignItems:'center', justifyContent:'center', height:'100vh', fontFamily:'DM Sans, sans-serif', color:'#7a9baa', fontSize:16 }}>
         Loading...
       </div>
     );
@@ -88,7 +107,7 @@ function App() {
 
   if (error) {
     return (
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', fontFamily: 'DM Sans, sans-serif', color: '#b91c1c', fontSize: 16 }}>
+      <div style={{ display:'flex', alignItems:'center', justifyContent:'center', height:'100vh', fontFamily:'DM Sans, sans-serif', color:'#b91c1c', fontSize:16 }}>
         {error}
       </div>
     );
@@ -101,21 +120,25 @@ function App() {
       {navOpen && (
         <SideNav
           activePage={activePage}
-          onNavigate={(page) => { setActivePage(page); setNavOpen(false); }}
+          onNavigate={page => { setActivePage(page); setNavOpen(false); }}
           onClose={() => setNavOpen(false)}
         />
       )}
 
-      {activePage === 'dashboard'     && (
+      {activePage === 'dashboard' && (
         <Dashboard
           pets={pets}
           vets={vets}
           appointments={appointments}
           records={records}
           petStatuses={petStatuses}
+          todayAttendance={todayAttendance}
+          attendanceSaved={attendanceSaved}
+          onAttendanceSaved={handleAttendanceSaved}
         />
       )}
-      {activePage === 'patients'      && (
+
+      {activePage === 'patients' && (
         <Patients
           pets={pets}
           setPets={setPets}
@@ -126,16 +149,21 @@ function App() {
           reload={loadAll}
         />
       )}
+
       {activePage === 'veterinarians' && (
         <Veterinarians
           pets={pets}
           vets={vets}
           setVets={setVets}
           petStatuses={petStatuses}
+          todayAttendance={todayAttendance}
+          archivedVets={archivedVets}
+          setArchivedVets={setArchivedVets}
           reload={loadAll}
         />
       )}
-      {activePage === 'appointments'  && (
+
+      {activePage === 'appointments' && (
         <Appointments
           appointments={appointments}
           setAppointments={setAppointments}
@@ -144,7 +172,8 @@ function App() {
           reload={loadAll}
         />
       )}
-      {activePage === 'records'       && (
+
+      {activePage === 'records' && (
         <MedicalRecords
           records={records}
           setRecords={setRecords}
@@ -153,12 +182,19 @@ function App() {
           reload={loadAll}
         />
       )}
-      {activePage === 'archive'       && (
+
+      {activePage === 'archive' && (
         <Archive
           pets={pets}
           records={records}
           vets={vets}
           petStatuses={petStatuses}
+          appointments={appointments}
+          archivedVets={archivedVets}
+          setArchivedVets={setArchivedVets}
+          setVets={setVets}
+          todayAttendance={todayAttendance}
+          reload={loadAll}
         />
       )}
     </div>
