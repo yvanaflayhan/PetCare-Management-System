@@ -1,168 +1,65 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import SplashScreen    from './Components/SplashScreen/SplashScreen';
-import Topbar          from './Components/Topbar/Topbar';
-import SideNav         from './Components/SideNav/SideNav';
-import Dashboard       from './Pages/Dashboard/Dashboard';
-import Patients        from './Pages/Patients/Patients';
-import Veterinarians   from './Pages/Veterinarians/Veterinarians';
-import Appointments    from './Pages/Appointments/Appointments';
-import MedicalRecords  from './Pages/MedicalRecords/MedicalRecords';
-import Archive         from './Pages/Archive/Archive';
+const BASE = process.env.REACT_APP_API_URL || "http://localhost:5246";
 
-import {
-  getPets, getVets, getAppointments,
-  getMedicalRecords, getAllPetStatuses, getPetTypes
-} from './services/api';
-
-const IDLE_TIMEOUT = 3 * 60 * 1000;
-
-function App() {
-  const [showSplash, setShowSplash]     = useState(true);
-  const [navOpen, setNavOpen]           = useState(false);
-  const [activePage, setActivePage]     = useState('dashboard');
-
-  const [pets, setPets]                 = useState([]);
-  const [vets, setVets]                 = useState([]);
-  const [appointments, setAppointments] = useState([]);
-  const [records, setRecords]           = useState([]);
-  const [petStatuses, setPetStatuses]   = useState([]);
-  const [petTypes, setPetTypes]         = useState([]);
-  const [loading, setLoading]           = useState(true);
-  const [error, setError]               = useState(null);
-
-  // load everything from backend on startup
-  async function loadAll() {
-    try {
-      setLoading(true);
-      const [p, v, a, r, ps, pt] = await Promise.all([
-        getPets(),
-        getVets(),
-        getAppointments(),
-        getMedicalRecords(),
-        getAllPetStatuses(),
-        getPetTypes(),
-      ]);
-      setPets(p);
-      setVets(v);
-      setAppointments(a);
-      setRecords(r);
-      setPetStatuses(ps);
-      setPetTypes(pt);
-    } catch (err) {
-      setError("Cannot connect to server. Is the backend running?");
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  useEffect(() => { loadAll(); }, []);
-
-  // idle timer — re-show splash after 3 min of no activity
-  const resetIdle = useCallback(() => {
-    if (showSplash) return;
-    clearTimeout(window._idleTimer);
-    window._idleTimer = setTimeout(() => setShowSplash(true), IDLE_TIMEOUT);
-  }, [showSplash]);
-
-  useEffect(() => {
-    const events = ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'];
-    events.forEach((e) => window.addEventListener(e, resetIdle));
-    resetIdle();
-    return () => {
-      events.forEach((e) => window.removeEventListener(e, resetIdle));
-      clearTimeout(window._idleTimer);
-    };
-  }, [resetIdle]);
-
-  if (showSplash) {
-    return <SplashScreen onDone={() => setShowSplash(false)} />;
-  }
-
-  if (loading) {
-    return (
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', fontFamily: 'DM Sans, sans-serif', color: '#7a9baa', fontSize: 16 }}>
-        Loading...
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', fontFamily: 'DM Sans, sans-serif', color: '#b91c1c', fontSize: 16 }}>
-        {error}
-      </div>
-    );
-  }
-
-  return (
-    <div>
-      <Topbar onMenuClick={() => setNavOpen(true)} />
-
-      {navOpen && (
-        <SideNav
-          activePage={activePage}
-          onNavigate={(page) => { setActivePage(page); setNavOpen(false); }}
-          onClose={() => setNavOpen(false)}
-        />
-      )}
-
-      {activePage === 'dashboard'     && (
-        <Dashboard
-          pets={pets}
-          vets={vets}
-          appointments={appointments}
-          records={records}
-          petStatuses={petStatuses}
-        />
-      )}
-      {activePage === 'patients'      && (
-        <Patients
-          pets={pets}
-          setPets={setPets}
-          vets={vets}
-          petTypes={petTypes}
-          petStatuses={petStatuses}
-          setPetStatuses={setPetStatuses}
-          reload={loadAll}
-        />
-      )}
-      {activePage === 'veterinarians' && (
-        <Veterinarians
-          pets={pets}
-          vets={vets}
-          setVets={setVets}
-          petStatuses={petStatuses}
-          reload={loadAll}
-        />
-      )}
-      {activePage === 'appointments'  && (
-        <Appointments
-          appointments={appointments}
-          setAppointments={setAppointments}
-          pets={pets}
-          vets={vets}
-          reload={loadAll}
-        />
-      )}
-      {activePage === 'records'       && (
-        <MedicalRecords
-          records={records}
-          setRecords={setRecords}
-          pets={pets}
-          vets={vets}
-          reload={loadAll}
-        />
-      )}
-      {activePage === 'archive'       && (
-        <Archive
-          pets={pets}
-          records={records}
-          vets={vets}
-          petStatuses={petStatuses}
-        />
-      )}
-    </div>
-  );
+// ─── helper ───────────────────────────────────────────────────────────────────
+async function request(method, path, body) {
+  const options = {
+    method,
+    headers: { "Content-Type": "application/json" },
+  };
+  if (body) options.body = JSON.stringify(body);
+  const res = await fetch(`${BASE}${path}`, options);
+  if (!res.ok) throw new Error(`${method} ${path} failed: ${res.status}`);
+  return res.json();
 }
 
-export default App;
+const get    = (path)        => request("GET",    path);
+const post   = (path, body)  => request("POST",   path, body);
+const put    = (path, body)  => request("PUT",    path, body);
+const del    = (path)        => request("DELETE", path);
+
+// ─── OWNERS ──────────────────────────────────────────────────────────────────
+export const getOwners        = ()           => get("/api/owners");
+export const createOwner      = (data)       => post("/api/owners", data);
+export const updateOwner      = (id, data)   => put(`/api/owners/${id}`, data);
+export const deleteOwner      = (id)         => del(`/api/owners/${id}`);
+
+// ─── PET TYPES ────────────────────────────────────────────────────────────────
+export const getPetTypes      = ()           => get("/api/pettypes");
+
+// ─── PETS ─────────────────────────────────────────────────────────────────────
+export const getPets          = ()           => get("/api/pets");
+export const getPetById       = (id)         => get(`/api/pets/${id}`);
+export const createPet        = (data)       => post("/api/pets", data);
+export const updatePet        = (id, data)   => put(`/api/pets/${id}`, data);
+export const deletePet        = (id)         => del(`/api/pets/${id}`);
+
+// ─── PET STATUS ───────────────────────────────────────────────────────────────
+export const getAllPetStatuses = ()           => get("/api/petstatus");
+export const updatePetStatus  = (petId, data)=> put(`/api/petstatus/${petId}`, data);
+
+// ─── VETERINARIANS ────────────────────────────────────────────────────────────
+export const getVets          = ()           => get("/api/veterinarians");
+export const getVetById       = (id)         => get(`/api/veterinarians/${id}`);
+export const createVet        = (data)       => post("/api/veterinarians", data);
+export const updateVet        = (id, data)   => put(`/api/veterinarians/${id}`, data);
+export const deleteVet        = (id)         => del(`/api/veterinarians/${id}`);
+
+// ─── APPOINTMENTS ─────────────────────────────────────────────────────────────
+export const getAppointments      = ()       => get("/api/appointments");
+export const getTodayAppointments = ()       => get("/api/appointments/today");
+export const createAppointment    = (data)   => post("/api/appointments", data);
+export const updateAppointment    = (id, data)=> put(`/api/appointments/${id}`, data);
+export const deleteAppointment    = (id)     => del(`/api/appointments/${id}`);
+
+// ─── MEDICAL RECORDS ─────────────────────────────────────────────────────────
+export const getMedicalRecords    = ()       => get("/api/medicalrecords");
+export const getRecordsByPet      = (petId)  => get(`/api/medicalrecords/pet/${petId}`);
+export const createMedicalRecord  = (data)   => post("/api/medicalrecords", data);
+export const updateMedicalRecord  = (id, data)=> put(`/api/medicalrecords/${id}`, data);
+export const deleteMedicalRecord  = (id)     => del(`/api/medicalrecords/${id}`);
+
+// ─── ATTENDANCE ───────────────────────────────────────────────────────────────
+export const getTodayAttendance   = ()           => get("/api/attendance/today");
+export const getMonthAttendance   = (year, month)=> get(`/api/attendance/month/${year}/${month}`);
+export const saveAttendance       = (entries)    => post("/api/attendance/save", entries);
+// entries = [{ vetId: 1, isPresent: true }, ...]

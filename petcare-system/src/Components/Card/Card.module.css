@@ -1,14 +1,14 @@
 .card {
   background: #ffffff;
-  border-radius: 24px;
+  border-radius: 20px;
   border: 1px solid rgba(226, 237, 241, 0.6);
 
-  padding: 28px;
+  padding: 22px;
   position: relative;
 
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 14px;
 
   box-shadow:
     0 2px 4px rgba(13, 43, 54, 0.01),
