@@ -45,7 +45,8 @@
 }
 
 .cardDiag {
-  font-size: 14px; /* bigger like you asked */
+  font-size: 14px;
+  /* bigger like you asked */
   color: #3ec8e0;
   font-weight: 600;
   margin-top: 4px;
@@ -91,34 +92,51 @@
 .recHeader {
   display: flex;
   align-items: center;
-  gap: 14px;
-  margin-bottom: 18px;
+  gap: 18px;
+  margin-bottom: 24px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid #edf3f6;
 }
 
 .recEmoji {
-  font-size: 34px;
+  font-size: 48px;
+  background: #eef7fb;
+  width: 72px;
+  height: 72px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .recPetName {
-  font-size: 22px;
+  font-size: 26px;
   font-weight: 700;
   color: #0d2b36;
 }
-
 .recBreed {
   font-weight: 400;
   color: #7a9baa;
 }
 
 .recMeta {
-  font-size: 13px;
+  font-size: 14px;
   color: #7a9baa;
+  margin-top: 6px;
 }
 
 .recGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  gap: 18px;
+  margin-top: 25px;
+}
+
+.recField {
+  background: #f8fbfd;
+  border: 1px solid #e3eef3;
+  border-radius: 14px;
+  padding: 18px;
 }
 
 .recFieldFull {
@@ -126,16 +144,20 @@
 }
 
 .recFieldLabel {
-  font-size: 11px;
+  font-size: 12px;
+  font-weight: 700;
   text-transform: uppercase;
   color: #7a9baa;
   letter-spacing: 1px;
+  margin-bottom: 10px;
 }
 
 /* BIGGER TEXT INSIDE DETAILS */
 .recText {
   font-size: 15px;
-  color: #0d2b36;
+  line-height: 1.7;
+  color: #16313c;
+  white-space: pre-wrap;
 }
 
 /* FORM */
@@ -155,5 +177,15 @@
 @media (max-width: 900px) {
   .formGrid {
     grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 700px) {
+  .recGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .recHeader {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }

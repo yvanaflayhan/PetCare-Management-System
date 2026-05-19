@@ -75,7 +75,14 @@ function Veterinarians({ pets, vets, setVets, petStatuses, reload }) {
         role: form.role,
         specialization: form.specialty || null,
         university: form.university || null,
-        graduationYear: form.graduationYear ? parseInt(form.graduationYear) : null,
+        graduationYear: form.graduationYear
+          ? parseInt(form.graduationYear)
+          : null,
+
+        // ADD THESE
+        phone: form.phone || null,
+        email: form.email || null,
+        isAvailable: form.available,
       };
       if (editVet) {
         await updateVet(editVet.id, data);
@@ -250,7 +257,7 @@ function Veterinarians({ pets, vets, setVets, petStatuses, reload }) {
       {/* MODAL */}
       {showModal && (
         <Modal
-          title={editVet ? '✏️ Edit Member' : '➕ Add Member'}
+          title={editVet ? '✏️ Edit Member' : ' Add Member'}
           onClose={() => setShowModal(false)}
         >
           <form onSubmit={handleSubmit}>

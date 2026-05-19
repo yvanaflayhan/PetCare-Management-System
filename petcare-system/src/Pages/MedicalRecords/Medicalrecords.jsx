@@ -49,6 +49,18 @@ function getPetEmoji(type) {
   return '🐾';
 }
 
+function formatDate(dateString) {
+  if (!dateString) return '—';
+
+  const date = new Date(dateString);
+
+  return date.toLocaleDateString('en-GB', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  });
+}
+
 function MedicalRecords({ records, pets, vets, reload }) {
   const [showModal, setShowModal] = useState(false);
   const [editRec, setEditRec] = useState(null);
@@ -122,7 +134,7 @@ function MedicalRecords({ records, pets, vets, reload }) {
     return (
       <PageLayout
         title="Medical Record"
-        subtitle={`${pet?.name || '—'} · ${selected.examinationDate}`}
+        subtitle={`${pet?.name || '—'} · ${formatDate(selected.examinationDate)}`}
       >
         <Btn variant="secondary" onClick={() => setSelected(null)}>← Back</Btn>
 
@@ -135,7 +147,7 @@ function MedicalRecords({ records, pets, vets, reload }) {
                   {pet?.name} <span className={styles.recBreed}>({pet?.breed})</span>
                 </div>
                 <div className={styles.recMeta}>
-                  Owner: {pet?.owner?.name || '—'} · {vet?.name || '—'} · {selected.examinationDate}
+                  Owner: {pet?.owner?.name || '—'} · {vet?.name || '—'} · {formatDate(selected.examinationDate)}
                 </div>
               </div>
             </div>
@@ -194,7 +206,7 @@ function MedicalRecords({ records, pets, vets, reload }) {
                     <span className={styles.cardBreed}>· {pet?.breed || '—'}</span>
                   </div>
                   <div className={styles.cardMeta}>
-                    {vet?.name || '—'} · {rec.examinationDate}
+                    {vet?.name || '—'} · {formatDate(rec.examinationDate)}
                   </div>
                   <div className={styles.cardDiag}>{rec.diagnosis}</div>
                 </div>
