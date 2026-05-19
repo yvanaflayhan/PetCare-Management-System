@@ -81,11 +81,8 @@ namespace Backend.Controllers
             vet.University = updated.University;
             vet.GraduationYear = updated.GraduationYear;
 
-            // FIX HERE 👇
             if (vet.VetDetails == null)
-            {
                 vet.VetDetails = new VetDetails();
-            }
 
             vet.VetDetails.Phone = updated.VetDetails?.Phone;
             vet.VetDetails.Email = updated.VetDetails?.Email;
