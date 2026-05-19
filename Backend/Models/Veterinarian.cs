@@ -32,13 +32,11 @@ namespace Backend.Models
 
         public VetDetails? VetDetails { get; set; }
 
-        public ICollection<Appointment> Appointments { get; set; }
-            = new List<Appointment>();
+        public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
 
-        public ICollection<Attendance> Attendances { get; set; }
-            = new List<Attendance>();
+        public ICollection<Attendance> Attendances { get; set; } = new List<Attendance>();
 
-        public ICollection<VetAnimalExpertise> AnimalExpertises { get; set; }
-            = new List<VetAnimalExpertise>();
+        public ICollection<VetAnimalExpertise> AnimalExpertises { get; set; } =
+            new List<VetAnimalExpertise>();
     }
 }

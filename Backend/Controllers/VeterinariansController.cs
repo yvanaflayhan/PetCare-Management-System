@@ -20,12 +20,12 @@ namespace Backend.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-           var vets = await _db.Veterinarians
-    .Where(v => !v.IsArchived)
-    .Include(v => v.VetDetails)
-    .Include(v => v.AnimalExpertises)
-        .ThenInclude(e => e.PetType)
-    .ToListAsync();
+            var vets = await _db
+                .Veterinarians.Where(v => !v.IsArchived)
+                .Include(v => v.VetDetails)
+                .Include(v => v.AnimalExpertises)
+                    .ThenInclude(e => e.PetType)
+                .ToListAsync();
 
             return Ok(vets);
         }
@@ -34,8 +34,8 @@ namespace Backend.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var vet = await _db.Veterinarians
-                .Include(v => v.VetDetails)
+            var vet = await _db
+                .Veterinarians.Include(v => v.VetDetails)
                 .Include(v => v.AnimalExpertises)
                     .ThenInclude(e => e.PetType)
                 .Include(v => v.Appointments)
@@ -53,8 +53,12 @@ namespace Backend.Controllers
         {
             vet.IsArchived = false;
 
-            _db.Veterinarians.Add(vet);
+            if (vet.VetDetails != null)
+            {
+                vet.VetDetails.Veterinarian = vet;
+            }
 
+            _db.Veterinarians.Add(vet);
             await _db.SaveChangesAsync();
 
             return Ok(vet);
@@ -64,7 +68,9 @@ namespace Backend.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, Veterinarian updated)
         {
-            var vet = await _db.Veterinarians.FindAsync(id);
+            var vet = await _db
+                .Veterinarians.Include(v => v.VetDetails)
+                .FirstOrDefaultAsync(v => v.Id == id);
 
             if (vet == null)
                 return NotFound();
@@ -75,41 +81,48 @@ namespace Backend.Controllers
             vet.University = updated.University;
             vet.GraduationYear = updated.GraduationYear;
 
+            // FIX HERE 👇
+            if (vet.VetDetails == null)
+            {
+                vet.VetDetails = new VetDetails();
+            }
+
+            vet.VetDetails.Phone = updated.VetDetails?.Phone;
+            vet.VetDetails.Email = updated.VetDetails?.Email;
+            vet.VetDetails.IsAvailable = updated.VetDetails?.IsAvailable ?? true;
+
             await _db.SaveChangesAsync();
 
             return Ok(vet);
         }
 
         [HttpDelete("{id}")]
-public async Task<IActionResult> Archive(int id, [FromQuery] string? reason)
-{
-    var vet = await _db.Veterinarians.FindAsync(id);
+        public async Task<IActionResult> Archive(int id, [FromQuery] string? reason)
+        {
+            var vet = await _db.Veterinarians.FindAsync(id);
 
-    if (vet == null)
-        return NotFound();
+            if (vet == null)
+                return NotFound();
 
-    vet.IsArchived = true;
-    vet.ArchiveReason = reason;
+            vet.IsArchived = true;
+            vet.ArchiveReason = reason;
 
-    await _db.SaveChangesAsync();
+            await _db.SaveChangesAsync();
 
-    return Ok(new
-    {
-        message = "Veterinarian archived successfully"
-    });
-}
+            return Ok(new { message = "Veterinarian archived successfully" });
+        }
 
-[HttpGet("archived")]
-public async Task<IActionResult> GetArchived()
-{
-    var vets = await _db.Veterinarians
-        .Where(v => v.IsArchived)
-        .Include(v => v.VetDetails)
-        .Include(v => v.AnimalExpertises)
-            .ThenInclude(e => e.PetType)
-        .ToListAsync();
+        [HttpGet("archived")]
+        public async Task<IActionResult> GetArchived()
+        {
+            var vets = await _db
+                .Veterinarians.Where(v => v.IsArchived)
+                .Include(v => v.VetDetails)
+                .Include(v => v.AnimalExpertises)
+                    .ThenInclude(e => e.PetType)
+                .ToListAsync();
 
-    return Ok(vets);
-}
+            return Ok(vets);
+        }
     }
 }
